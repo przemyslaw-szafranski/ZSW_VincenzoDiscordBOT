@@ -7,7 +7,7 @@ namespace VincenzoDiscordBot
     {
         public const string DISCORD_CONFIG_PATH = "Config/discord_config";
         //Users
-        internal static readonly string USERACCOUNTS_FOLDER = "Users";
+        public const string USERACCOUNTS_FOLDER = "Users";
 
         public const int WELCOME_HACZYKS = 10;
         public const int LIVE_BROADCASTS_RESULTS = 5;

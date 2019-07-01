@@ -34,7 +34,7 @@ namespace VincenzoBot
             _container.RegisterSingleton<ILogger,Logger>();
             _container.RegisterSingleton<DiscordLogger>();
             _container.RegisterSingleton<BotConfigRepository>();
-            _container.RegisterSingleton<UserAccountRepository>();
+            _container.RegisterSingleton<VincenzoDiscordBot.Repositories.UserAccountRepository>();
             //_container.RegisterSingleton<User>(new InjectionConstructor(typeof(UserAccountRepository)));
             _container.RegisterType<DiscordSocketConfig>(new InjectionFactory(i => SocketConfig.GetDefault()));
             _container.RegisterType<DiscordSocketClient>(new InjectionConstructor(typeof(DiscordSocketConfig)));

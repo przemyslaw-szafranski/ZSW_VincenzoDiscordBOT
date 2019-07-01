@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using VincenzoBot;
 using VincenzoBot.Storages;
 using VincenzoDiscordBot.Discord;
@@ -54,6 +55,7 @@ namespace VincenzoDiscordBot.Repositories
                 Id = user.Id,
                 Nickname = user.Username
             };
+            _accounts.Add(newAccount);
             SaveAccount(newAccount);
         }
         public void SaveAccounts()
@@ -85,12 +87,20 @@ namespace VincenzoDiscordBot.Repositories
         }
         public UserAccount GetUserById(ulong id)
         {
-            var result = from a in _accounts
-                         where a.Id == id
-                         select a;
-            return result.FirstOrDefault();
+            foreach(UserAccount a in _accounts)
+            {
+                if (a.Id == id) return a;
+            }
+            return null;
         }
-
+        public void RemoveUser(ulong id)
+        {
+            var user = GetUserById(id);
+            _accounts.Remove(user);
+            _storage.DeleteObject(Constants.USERACCOUNTS_FOLDER + $"/{user.Nickname}");
+            if(!_storage.Exists(Constants.USERACCOUNTS_FOLDER + $"/{user.Nickname}"))
+            _logger.Log("Deleted user: " + user.Nickname);
+        }
         public static implicit operator UserAccountRepository(Mock<UserAccountRepository> v)
         {
             return v;

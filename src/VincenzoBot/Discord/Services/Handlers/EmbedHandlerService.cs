@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VincenzoDiscordBot.Services.Discord
+namespace VincenzoBot.Services.Discord
 {
     public static class EmbedHandlerService
     {

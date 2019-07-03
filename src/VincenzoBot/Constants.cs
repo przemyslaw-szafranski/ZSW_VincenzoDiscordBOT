@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace VincenzoDiscordBot
+namespace VincenzoBot
 {
     public static class Constants
     {

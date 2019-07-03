@@ -2,30 +2,34 @@
 using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
-using VicenzoDiscordBot;
-using VicenzoDiscordBot.Modules;
-using VincenzoDiscordBot.Entities;
-using VincenzoDiscordBot.Repositories;
+using VincenzoBot;
+using VincenzoBot.Modules;
+using VincenzoBot.Config;
+using VincenzoBot.Repositories;
+using Discord.Commands;
 
-namespace VincenzoDiscordBot.Discord.Entities
+namespace VincenzoBot.Discord
 {
     public class Connection
     {
         private readonly DiscordSocketClient _client;
         private readonly DiscordLogger _logger;
+        private readonly CommandService _service;
+        private readonly UserAccountRepository _userAccountRepository;
         private CommandHandlerService _commandHandler;
         private MessageHandlerService _messageHandler;
         private UserEventsHandlerService _userEventsHandler;
-        private UserAccountRepository _userAccountRepository;
-        public Connection(DiscordLogger logger, DiscordSocketClient client, UserAccountRepository userAccountRepository)
+        public Connection(DiscordLogger logger, DiscordSocketClient client, UserAccountRepository userAccountRepository, CommandService service)
         {
+            _service = service;
             _logger = logger;
             _client = client;
             _userAccountRepository = userAccountRepository;
+
         }
         internal async Task ConnectAsync(DiscordBotConfig config)
         {
-            _commandHandler = new CommandHandlerService(_client, _logger, config);
+            _commandHandler = new CommandHandlerService(_client, _logger, config, _service);
             _messageHandler = new MessageHandlerService(_client, _logger, config);
             _userEventsHandler = new UserEventsHandlerService(_client, _logger, config, _userAccountRepository);
             _client.Log += _logger.Log;

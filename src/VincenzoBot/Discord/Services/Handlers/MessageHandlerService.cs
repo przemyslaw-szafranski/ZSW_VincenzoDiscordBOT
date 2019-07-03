@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using VincenzoDiscordBot.Discord;
-using VincenzoDiscordBot.Entities;
+using VincenzoBot.Discord;
+using VincenzoBot.Config;
 
-namespace VicenzoDiscordBot.Modules
+namespace VincenzoBot.Modules
 {
     public class MessageHandlerService
     {

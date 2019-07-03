@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VincenzoDiscordBot
+namespace VincenzoBot
 {
     class NotificationService
     {

@@ -2,29 +2,28 @@
 using Discord.WebSocket;
 using System.Threading.Tasks;
 using System.Reflection;
-using VincenzoDiscordBot.Discord;
+using VincenzoBot.Discord;
 using System;
-using VincenzoDiscordBot.Entities;
+using VincenzoBot.Config;
 
-namespace VicenzoDiscordBot
+namespace VincenzoBot
 {
     class CommandHandlerService
     {
         private readonly DiscordSocketClient _client;
-        private CommandService _service;
+        private readonly CommandService _service;
         private readonly DiscordLogger _logger;
         private readonly DiscordBotConfig _config;
 
-        public CommandHandlerService(DiscordSocketClient client, DiscordLogger logger, DiscordBotConfig config)
+        public CommandHandlerService(DiscordSocketClient client, DiscordLogger logger, DiscordBotConfig config, CommandService service)
         {
             _config = config;
             _client = client;
             _logger = logger;
-
+            _service = service;
         }
         public async Task InitializeAsync()
         {
-            _service = new CommandService();
             await _service.AddModulesAsync(assembly: Assembly.GetEntryAssembly(),services: null);
             _client.MessageReceived += HandleCommandAsync;
         }

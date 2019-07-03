@@ -1,34 +1,24 @@
-﻿using System;
-using System.IO;
-using System.Threading;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Threading.Tasks;
-using VicenzoDiscordBot;
-using VicenzoDiscordBot.Modules;
-using VincenzoBot.Storages;
-using VincenzoDiscordBot;
-using VincenzoDiscordBot.Discord.Entities;
-using VincenzoDiscordBot.Repositories;
+using VincenzoBot.Discord;
 
 namespace VincenzoBot
 {
     internal class Program
     {
-        private static async Task DiscordBotThread(Connection discordConnection, BotConfigRepository discordBotConfig)
-        {
-            await discordConnection.ConnectAsync(discordBotConfig._config);
-        }
+        private static IServiceProvider _serviceProvider;
         private static async Task Main(string[] args)
         {
-            Unity.RegisterTypes();
-           // var storage = Unity.Resolve<IDataStorage>();
-            var logger = Unity.Resolve<ILogger>();
-            var discordConnection = Unity.Resolve<Connection>();
-            var userAccountRepository = Unity.Resolve<VincenzoDiscordBot.Repositories.UserAccountRepository>();
-            var discordBotConfig = Unity.Resolve<BotConfigRepository>();
+            //Create list of dependencies
+            _serviceProvider = Startup.BuildServiceProvider();
+            // Unity.RegisterTypes();
+            var discordConnection = _serviceProvider.GetRequiredService<Connection>();
+            var logger = _serviceProvider.GetRequiredService<ILogger>();
+            // var userAccountRepository = Unity.Resolve<VincenzoDiscordBot.Repositories.UserAccountRepository>();
+             var discordBotConfig = _serviceProvider.GetRequiredService<BotConfigRepository>();
             try
             {
-                // Thread thread1 = new Thread(async () => await DiscordBotThread(discordConnection, discordBotConfig));
-                //thread1.Start();
                 await discordConnection.ConnectAsync(discordBotConfig._config);
 
             }
@@ -42,4 +32,5 @@ namespace VincenzoBot
         }
 
     }
+   
 }

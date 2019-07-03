@@ -8,11 +8,11 @@ using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Runtime.InteropServices;
-using VicenzoDiscordBot;
-using VincenzoDiscordBot.Services;
+using VincenzoBot;
+using VincenzoBot.Services;
 using Newtonsoft.Json.Linq;
 
-namespace VincenzoDiscordBot
+namespace VincenzoBot
     {
     public class YouTubeService
     {

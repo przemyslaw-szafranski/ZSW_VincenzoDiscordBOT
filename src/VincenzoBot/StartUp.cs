@@ -2,8 +2,10 @@
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using VicenzoBot.Modules;
 using VincenzoBot.Config;
 using VincenzoBot.Repositories;
+using VincenzoBot.Services.Discord;
 using VincenzoBot.Storages;
 using VincenzoBot.Storages.Implementations;
 
@@ -11,6 +13,12 @@ namespace VincenzoBot.Discord
 {
     public class Startup
     {
+        private readonly static IServiceProvider _serviceProvider;
+
+        public static IServiceProvider GetServiceProvider()
+        {
+            return _serviceProvider;
+        }
         public static IServiceProvider BuildServiceProvider() => new ServiceCollection()
             //Global
             .AddSingleton<ILogger, Logger>()
@@ -21,8 +29,10 @@ namespace VincenzoBot.Discord
             .AddSingleton<Connection>()
             .AddSingleton<DiscordSocketClient>()
             .AddSingleton<CommandService>()
+            .AddSingleton<CommandHandlerService>()
             .AddSingleton<DiscordLogger>()
             .AddSingleton<UserAccountRepository>()
+            .AddSingleton<UserAccountService>()
             // You can pass in an instance of the desired type
 
             // ...or by using the generic method.

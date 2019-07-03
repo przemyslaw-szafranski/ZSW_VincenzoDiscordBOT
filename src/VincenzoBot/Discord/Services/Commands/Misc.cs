@@ -16,9 +16,9 @@ namespace VincenzoBot.Modules
         [Command("hi")]
         public async Task Hi()
         {
-            if (_config.welcomeMessageChannelID != 0)
+            if (_config.WelcomeMessageChannelID != 0)
             {
-                var channel = Context.Guild.GetChannel(_config.welcomeMessageChannelID) as ISocketMessageChannel;
+                var channel = Context.Guild.GetChannel(_config.WelcomeMessageChannelID) as ISocketMessageChannel;
                 await channel.SendMessageAsync(Utilities.GetPhrase("welcomeMessage"));
             }
         }

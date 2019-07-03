@@ -23,7 +23,10 @@ namespace VincenzoBot
             _logger.Log($"Reading the configuration ({Constants.DISCORD_CONFIG_PATH})");
             var discordBotConfig = _dataStorage.RestoreObject<DiscordBotConfig>(Constants.DISCORD_CONFIG_PATH);
             if (discordBotConfig == null)
+            {
+                discordBotConfig = new DiscordBotConfig();
                 _dataStorage.StoreObject(discordBotConfig, Constants.DISCORD_CONFIG_PATH);
+            }
             _config = discordBotConfig;
         }
 

@@ -19,26 +19,28 @@ namespace VincenzoBot.Discord
         private CommandHandlerService _commandHandler;
         private MessageHandlerService _messageHandler;
         private UserEventsHandlerService _userEventsHandler;
-        public Connection(DiscordLogger logger, DiscordSocketClient client, UserAccountRepository userAccountRepository, CommandService service)
+        private readonly IServiceProvider _serviceProvider;
+        public Connection(DiscordLogger logger, DiscordSocketClient client, UserAccountRepository userAccountRepository, CommandService service, IServiceProvider serviceProvider)
         {
             _service = service;
             _logger = logger;
             _client = client;
             _userAccountRepository = userAccountRepository;
+            _serviceProvider = serviceProvider;
 
         }
         internal async Task ConnectAsync(DiscordBotConfig config)
         {
-            _commandHandler = new CommandHandlerService(_client, _logger, config, _service);
+            _commandHandler = new CommandHandlerService(_client, _logger, config, _service, _serviceProvider);
             _messageHandler = new MessageHandlerService(_client, _logger, config);
             _userEventsHandler = new UserEventsHandlerService(_client, _logger, config, _userAccountRepository);
             _client.Log += _logger.Log;
-           // _client.Ready += Ready;
+            _client.Ready += Ready;
             if (config.Token == null || config.Token == "")
             {
                 throw new ArgumentNullException("Token", "Discord Bot Token is empty!");
             }
-            if (config.cmdPrefix == null || config.cmdPrefix == "")
+            if (config.CmdPrefix == null || config.CmdPrefix == "")
             {
                 throw new ArgumentNullException("cmdPrefix", "Discord Bot cmdPrefix is empty!");
             }
@@ -48,6 +50,20 @@ namespace VincenzoBot.Discord
             _messageHandler.Initialize();
             _userEventsHandler.Initialize();
             await Task.Delay(-1);
+
+        }
+
+        private Task Ready()
+        {
+            foreach (var guild in _client.Guilds)
+            {
+                foreach (var user in guild.Users)
+                {
+                    if(!user.IsBot&&!user.IsWebhook)
+                        _userAccountRepository.GetUserOrCreateUser(user);
+                }
+            }
+            return Task.CompletedTask;
         }
     }
 }

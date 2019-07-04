@@ -20,11 +20,14 @@ namespace VincenzoBot.Discord
         private MessageHandlerService _messageHandler;
         private UserEventsHandlerService _userEventsHandler;
         private readonly IServiceProvider _serviceProvider;
-        public Connection(DiscordLogger logger, DiscordSocketClient client, UserAccountRepository userAccountRepository, CommandService service, IServiceProvider serviceProvider)
+        private readonly LevelingService _levelingService;
+        public Connection(DiscordLogger logger, DiscordSocketClient client, UserAccountRepository userAccountRepository, 
+            CommandService service, IServiceProvider serviceProvider, LevelingService levelingService)
         {
             _service = service;
             _logger = logger;
             _client = client;
+            _levelingService = levelingService;
             _userAccountRepository = userAccountRepository;
             _serviceProvider = serviceProvider;
 
@@ -32,7 +35,7 @@ namespace VincenzoBot.Discord
         internal async Task ConnectAsync(DiscordBotConfig config)
         {
             _commandHandler = new CommandHandlerService(_client, _logger, config, _service, _serviceProvider);
-            _messageHandler = new MessageHandlerService(_client, _logger, config);
+            _messageHandler = new MessageHandlerService(_client, _logger, config, _levelingService, _userAccountRepository);
             _userEventsHandler = new UserEventsHandlerService(_client, _logger, config, _userAccountRepository);
             _client.Log += _logger.Log;
             _client.Ready += Ready;
@@ -60,7 +63,7 @@ namespace VincenzoBot.Discord
                 foreach (var user in guild.Users)
                 {
                     if(!user.IsBot&&!user.IsWebhook)
-                        _userAccountRepository.GetUserOrCreateUser(user);
+                        _userAccountRepository.GetOrCreateUser(user);
                 }
             }
             return Task.CompletedTask;

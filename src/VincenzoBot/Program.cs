@@ -13,7 +13,7 @@ namespace VincenzoBot
             IServiceProvider _serviceProvider = Startup.GetServiceProvider();
             _serviceProvider = Startup.BuildServiceProvider();
             var discordConnection = _serviceProvider.GetRequiredService<Connection>();
-            var logger = _serviceProvider.GetRequiredService<ILogger>();
+            ILogger logger = _serviceProvider.GetRequiredService<ILogger>();
             // var userAccountRepository = Unity.Resolve<VincenzoDiscordBot.Repositories.UserAccountRepository>();
              var discordBotConfig = _serviceProvider.GetRequiredService<BotConfigRepository>();
             try

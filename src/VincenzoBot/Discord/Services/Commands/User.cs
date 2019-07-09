@@ -25,9 +25,8 @@ namespace VicenzoBot.Modules
         }
         [Command("mycard")]
         [Cooldown(10)]
-        public async Task MyStats()
+        public async Task MyCard()
         {
-
             UserAccount user = _userRepo.GetOrCreateUser(Context.User);
             var embed = new EmbedBuilder();
             embed.WithTitle("");

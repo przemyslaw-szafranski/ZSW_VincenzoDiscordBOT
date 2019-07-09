@@ -15,9 +15,9 @@ namespace VincenzoBot.Repositories
     public class UserAccountRepository
     {
         private List<UserAccount> _accounts = null;
-        private readonly DiscordLogger _logger;
+        private readonly ILogger _logger;
         private readonly IDataStorage _storage;
-        public UserAccountRepository(DiscordLogger logger, IDataStorage storage)
+        public UserAccountRepository(ILogger logger, IDataStorage storage)
         {
             _logger = logger;
             _storage = storage;
@@ -26,13 +26,13 @@ namespace VincenzoBot.Repositories
         private List<UserAccount> LoadOrCreate()
         {
             List<UserAccount> list = new List<UserAccount>();
-            if (Directory.Exists(Constants.USERACCOUNTS_FOLDER) 
-                && Directory.GetFiles(Constants.USERACCOUNTS_FOLDER).Count()>0)
+            if (Directory.Exists(Constants.USERACCOUNTS_FOLDER)
+                && Directory.GetFiles(Constants.USERACCOUNTS_FOLDER).Count() > 0)
             {
                 UserAccount newUser;
                 foreach (var f in Directory.GetFiles(Constants.USERACCOUNTS_FOLDER).Select(Path.GetFileNameWithoutExtension))
                 {
-                    newUser = _storage.RestoreObject<UserAccount>(Constants.USERACCOUNTS_FOLDER+"/"+f);
+                    newUser = _storage.RestoreObject<UserAccount>(Constants.USERACCOUNTS_FOLDER + "/" + f);
                     list.Add(newUser);
                 }
                 _logger.Log("Loading users accounts");
@@ -45,13 +45,45 @@ namespace VincenzoBot.Repositories
                 return new List<UserAccount>();
             }
         }
+        public TimeSpan GiveDaily(SocketUser user)
+        {
+            UserAccount account = GetUserById(user.Id);
+            var difference = account.LastDaily.AddDays(1).Subtract(DateTime.Now);
+            if (difference.Ticks <= 0)
+            {
+                account.Haczyks += Constants.DAILY_HACZYKS_GAIN;
+                account.LastDaily = DateTime.Now;
+                SaveAccount(account);
+                _logger.Log($"{account.Nickname} has recieved {Constants.DAILY_HACZYKS_GAIN} daily Haczyks.");
+                return TimeSpan.Zero;
+            }
+            else
+            {
+                return difference;
+            }
+        }
+        public void GiveHaczyks(SocketUser user, int haczyks)
+        {
+            UserAccount account = GetUserById(user.Id);
+            if (haczyks > 0)
+            {
+                account.Haczyks += (uint)haczyks;
+                _logger.Log($"{account.Nickname} has recieved {haczyks} Haczyks.");
+            }
+            else
+            {
+                account.Haczyks -= (uint)haczyks;
+                _logger.Log($"{account.Nickname} has lost {haczyks} Haczyks.");
+            }
+            SaveAccount(account);
+        }
         public List<UserAccount> GetAccounts()
         {
             return _accounts;
         }
         public UserAccount CreateUserAccount(SocketUser user)
         {
-            _logger.Log("Creating user: "+user.Username);
+            _logger.Log("Creating user: " + user.Username);
             var newAccount = new UserAccount()
             {
                 Id = user.Id,
@@ -63,7 +95,7 @@ namespace VincenzoBot.Repositories
         }
         public async Task SaveAccounts()
         {
-            await _logger.Log("Saving all user accounts: ");
+            _logger.Log("Saving all user accounts: ");
             foreach (var a in _accounts)
             {
                 string filePath = Constants.USERACCOUNTS_FOLDER + $"/{a.Nickname}";
@@ -95,7 +127,7 @@ namespace VincenzoBot.Repositories
         }
         public UserAccount GetUserById(ulong id)
         {
-            foreach(UserAccount a in _accounts)
+            foreach (UserAccount a in _accounts)
             {
                 if (a.Id == id) return a;
             }
@@ -106,8 +138,8 @@ namespace VincenzoBot.Repositories
             var user = GetUserById(id);
             _accounts.Remove(user);
             _storage.DeleteObject(Constants.USERACCOUNTS_FOLDER + $"/{user.Nickname}");
-            if(!_storage.Exists(Constants.USERACCOUNTS_FOLDER + $"/{user.Nickname}"))
-            _logger.Log("Deleted user: " + user.Nickname);
+            if (!_storage.Exists(Constants.USERACCOUNTS_FOLDER + $"/{user.Nickname}"))
+                _logger.Log("Deleted user: " + user.Nickname);
         }
         public static implicit operator UserAccountRepository(Mock<UserAccountRepository> v)
         {

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VincenzoBot.Config;
 using VincenzoBot.Preconditions;
 using VincenzoBot.Repositories;
 using VincenzoBot.Services.Discord;
@@ -16,19 +17,20 @@ namespace VincenzoBot.Modules
     public class Admin : ModuleBase<SocketCommandContext>
     {
         private readonly UserAccountRepository _userRepo;
-        public Admin(UserAccountRepository userRepo)
+        private readonly BotConfigRepository _configRepo;
+        public Admin(UserAccountRepository userRepo, BotConfigRepository config)
         {
             _userRepo = userRepo;
+            _configRepo = config;
         }
-
         [Command("saveAccounts"), Alias("saccounts", "savea")]
+        [RequireUserPermission(GuildPermission.Administrator)]
         public async Task SaveAccounts()
         {
             await Context.Message.DeleteAsync();
             await _userRepo.SaveAccounts();
             await Context.Channel.SendMessageAsync("*Vincenzo zamyka kartotekę i chowa do szuflady*\nZapisałem ich dane... Którego odstrzelimy?");
         }
-        //TODO update czyjes yt
         //TODO logger tych komend
         [Command("announce")]
         [Remarks("Make A Announcement")]
@@ -42,12 +44,12 @@ namespace VincenzoBot.Modules
         }
         [Command("Game"), Alias("SetGame")]
         [Remarks("Change what the bot is currently playing.")]
-        [RequireOwner]
+        [RequireUserPermission(GuildPermission.Administrator)]
         public async Task SetGame([Remainder] string gamename)
         {
-          //  await Context.Client.SetGameAsync(gamename);
-          //  var channel = Context.Guild.GetChannel(BotConfigRepository.Config.commandsOutputChannelID) as ISocketMessageChannel;
-          //  await channel.SendMessageAsync($"Changed game to `{gamename}`");
+            await Context.Client.SetGameAsync(gamename);
+            var channel = Context.Guild.GetChannel(_configRepo._config.CommandsOutputChannelID) as ISocketMessageChannel;
+            await channel.SendMessageAsync($"Changed game to `{gamename}`");
         }
 
         [Command("purge")]

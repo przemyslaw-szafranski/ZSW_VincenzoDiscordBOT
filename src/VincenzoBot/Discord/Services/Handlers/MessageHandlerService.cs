@@ -27,7 +27,6 @@ namespace VincenzoBot.Modules
             _logger = logger;
             _levelingService = levelingService;
             _userRepo = userRepo;
-
         }
         public void Initialize()
         {

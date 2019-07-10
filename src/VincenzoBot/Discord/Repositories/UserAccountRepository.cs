@@ -102,16 +102,16 @@ namespace VincenzoBot.Repositories
                 _storage.StoreObject(a, filePath);
             }
         }
-        public void SaveAccount(SocketUser socketUser)
+        public async Task SaveAccount(SocketUser socketUser)
         {
             _logger.Log("Saving user: " + socketUser.Username);
             UserAccount user = GetOrCreateUser(socketUser);
-            _storage.StoreObject(user, Constants.USERACCOUNTS_FOLDER + $"/{user.Nickname}");
+             _storage.StoreObject(user, Constants.USERACCOUNTS_FOLDER + $"/{user.Nickname}");
         }
-        public void SaveAccount(UserAccount user)
+        public async Task SaveAccount(UserAccount user)
         {
             _logger.Log("Saving user: " + user.Nickname);
-            _storage.StoreObject(user, Constants.USERACCOUNTS_FOLDER + $"/{user.Nickname}");
+           _storage.StoreObject(user, Constants.USERACCOUNTS_FOLDER + $"/{user.Nickname}");
         }
         public UserAccount GetOrCreateUser(SocketUser user)
         {

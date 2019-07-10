@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VincenzoBot.Config;
+using VincenzoBot.Discord.Services.Commands.Preconditions;
 using VincenzoBot.Models;
 using VincenzoBot.Preconditions;
 using VincenzoBot.Repositories;
@@ -39,9 +40,12 @@ namespace VincenzoBot.Modules
         }
         //HAZARD
         //TODO obrażanie jak ma sie za malo kasy :D
-        [Command("coin")]
-        [Remarks("Obstawiasz wynik podrzucenia monety, możesz wygrać lub przegrać.")]
+        //TODO improve
+        //TODO embed?
         [Cooldown(10)]
+        [Command("coin", RunMode = RunMode.Async)]
+        [DeleteCommandUsage]
+        [Remarks("Obstawiasz wynik podrzucenia monety, możesz wygrać lub przegrać.")]
         public async Task Coin(int bet, [Remainder]string side)
         {
             side = side.ToLower();
@@ -52,7 +56,6 @@ namespace VincenzoBot.Modules
             {
                 Random rnd = new Random();
                 int value = rnd.Next(0, 2);
-                _userRepo.GiveHaczyks(Context.User, -bet);
                 string betstring = $"**{Context.User.Username} obstawił:** {side} za {bet} w rzucie monetą.";
                 var message = await Context.Channel.SendMessageAsync(betstring);
                 await Task.Delay(1000);
@@ -64,13 +67,14 @@ namespace VincenzoBot.Modules
                     await message.ModifyAsync(msg => msg.Content = betstring);
                     if ((side.Equals("orzel") || side.Equals("orzeł")))
                     {
-                        _userRepo.GiveHaczyks(Context.User, bet * 2);
-                        betstring = betstring + " 💰😄";
+                        _userRepo.GiveHaczyks(Context.User, bet);
+                        betstring = betstring + $" 💰😄 +{bet}֏";
                         await message.ModifyAsync(msg => msg.Content = betstring);
                     }
                     else
                     {
-                        betstring = betstring + " 💸😪";
+                        _userRepo.GiveHaczyks(Context.User, -bet);
+                        betstring = betstring + $" 💸😪 -{bet}֏";
                         await message.ModifyAsync(msg => msg.Content = betstring);
                     }
                 }
@@ -80,13 +84,14 @@ namespace VincenzoBot.Modules
                     await message.ModifyAsync(msg => msg.Content = betstring);
                     if (side.Equals("reszka"))
                     {
-                        _userRepo.GiveHaczyks(Context.User, bet * 2);
-                        betstring = betstring + " 💰😄";
+                        _userRepo.GiveHaczyks(Context.User, bet);
+                        betstring = betstring + $" 💰😄 +{bet}֏";
                         await message.ModifyAsync(msg => msg.Content = betstring);
                     }
                     else
                     {
-                        betstring = betstring + " 💸😪";
+                        _userRepo.GiveHaczyks(Context.User, -bet);
+                        betstring = betstring + $" 💸😪 -{bet}֏";
                         await message.ModifyAsync(msg => msg.Content = betstring);
                     }
                 }

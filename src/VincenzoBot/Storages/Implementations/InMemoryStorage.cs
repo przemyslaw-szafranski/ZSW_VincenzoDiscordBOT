@@ -34,5 +34,10 @@ namespace VincenzoBot.Storages
                 throw new ArgumentException($"The key '{key}' already exists in the dictionary.");
             _dictionary.Add(key,obj);
         }
+
+        public void UpdateObject(object obj, string oldPath, string newPath)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -38,7 +38,7 @@ namespace VincenzoBot.Discord
             _messageHandler = new MessageHandlerService(_client, _logger, config, _levelingService, _userAccountRepository);
             _userEventsHandler = new UserEventsHandlerService(_client, _logger, config, _userAccountRepository);
             _client.Log += _logger.Log;
-            _client.Ready += Ready;
+            _client.Ready += ReadyAsync;
             if (config.Token == null || config.Token == "")
             {
                 throw new ArgumentNullException("Token", "Discord Bot Token is empty!");
@@ -56,14 +56,14 @@ namespace VincenzoBot.Discord
 
         }
 
-        private Task Ready()
+        private async Task<Task> ReadyAsync()
         {
             foreach (var guild in _client.Guilds)
             {
                 foreach (var user in guild.Users)
                 {
                     if(!user.IsBot&&!user.IsWebhook)
-                        _userAccountRepository.GetOrCreateUser(user);
+                        await _userAccountRepository.GetOrCreateUserAsync(user);
                 }
             }
             return Task.CompletedTask;

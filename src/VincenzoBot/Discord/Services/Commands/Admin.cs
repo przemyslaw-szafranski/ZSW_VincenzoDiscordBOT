@@ -89,7 +89,7 @@ namespace VincenzoBot.Modules
             await SendLogToChannel($"{Context.User.Username} has muted user {user.Mention} `{reason}`");
             _logger.Log($"{Context.User.Username} has muted user {user.Username + user.Id} {reason}");
             await Context.Channel.SendMessageAsync($"*Vincenzo zakneblował buzię {user.Mention}*, powód: `{reason}`");
-            //await user.SendMessageAsync($"*Vincenzo zakneblował Ci buzię*, powód: `{reason}`\nhttps://d.wattpad.com/story_parts/663262466/images/156dd45d110b244a348680547166.gif");
+            await user.SendMessageAsync($"*Vincenzo zakneblował Ci buzię*, powód: `{reason}`\nhttps://d.wattpad.com/story_parts/663262466/images/156dd45d110b244a348680547166.gif");
             var muteRole = await GetMuteRole(user.Guild);
             if (!user.RoleIds.Contains(muteRole.Id))
                 await user.AddRoleAsync(muteRole).ConfigureAwait(false);

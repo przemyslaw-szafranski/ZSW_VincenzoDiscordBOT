@@ -17,11 +17,11 @@ namespace VincenzoBot.Modules
 {
     public class Economy : ModuleBase<SocketCommandContext>
     {
-        private readonly UserAccountRepository _userRepo;
+        private readonly UserAccountService _userService;
         private readonly BotConfigRepository _configRepo;
-        public Economy(UserAccountRepository userRepo, BotConfigRepository config)
+        public Economy(UserAccountService userService, BotConfigRepository config)
         {
-            _userRepo = userRepo;
+            _userService = userService;
             _configRepo = config;
         }
         [Command("daily")]
@@ -30,13 +30,14 @@ namespace VincenzoBot.Modules
         public async Task GiveDaily()
         {
             await Context.Message.DeleteAsync();
-            var time = _userRepo.GiveDaily(Context.User);
-            if (time == TimeSpan.Zero)
+            var time = _userService.GiveDailyAsync(Context.User);
+            if (time.Result == TimeSpan.Zero)
             {
-                await Context.Channel.SendMessageAsync($"{Context.User.Username} odebrał dzienną nagrodę ({Constants.DAILY_HACZYKS_GAIN} haczyków).");
+
+                await Context.Channel.SendMessageAsync($"{UserAccountService.GetUsername(Context.User)} odebrał dzienną nagrodę ({Constants.DAILY_HACZYKS_GAIN} haczyków).");
             }
             else
-                await Context.User.SendMessageAsync($"Gdzie z tymi łapskami! Do odebrania dziennej nagrody pozostało Ci {time.ToString(@"hh\:mm")}");
+                await Context.User.SendMessageAsync($"Gdzie z tymi łapskami! Do odebrania dziennej nagrody pozostało Ci {time.Result.ToString(@"hh\:mm")}");
         }
         //HAZARD
         //TODO obrażanie jak ma sie za malo kasy :D
@@ -49,14 +50,14 @@ namespace VincenzoBot.Modules
         public async Task Coin(int bet, [Remainder]string side)
         {
             side = side.ToLower();
-            if (bet <= 0 || (!side.Equals("orzel") && !side.Equals("orzeł") && !side.Equals("reszka")) || _userRepo.GetUserById(Context.User.Id).Haczyks<bet) return;
+            if (bet <= 0 || (!side.Equals("orzel") && !side.Equals("orzeł") && !side.Equals("reszka")) || _userService.GetUserHaczyks(Context.User)<bet) return;
             if (bet > Constants.COIN_MAX_BET)
                 await Context.User.SendMessageAsync($"Maksymalna stawka podrzucania monetą to {Constants.COIN_MAX_BET}");
             else
             {
                 Random rnd = new Random();
                 int value = rnd.Next(0, 2);
-                string betstring = $"**{Context.User.Username} obstawił:** {side} za {bet} w rzucie monetą.";
+                string betstring = $"**{UserAccountService.GetUsername(Context.User)} obstawił:** {side} za {bet} w rzucie monetą.";
                 var message = await Context.Channel.SendMessageAsync(betstring);
                 await Task.Delay(1000);
                 await message.ModifyAsync(msg => msg.Content = betstring+"\n *Vincenzo podrzuca monetą...*");
@@ -67,13 +68,13 @@ namespace VincenzoBot.Modules
                     await message.ModifyAsync(msg => msg.Content = betstring);
                     if ((side.Equals("orzel") || side.Equals("orzeł")))
                     {
-                        _userRepo.GiveHaczyks(Context.User, bet);
+                        await _userService.GiveHaczyksAsync(Context.User, bet);
                         betstring = betstring + $" 💰😄 +{bet}֏";
                         await message.ModifyAsync(msg => msg.Content = betstring);
                     }
                     else
                     {
-                        _userRepo.GiveHaczyks(Context.User, -bet);
+                        await _userService.GiveHaczyksAsync(Context.User, -bet);
                         betstring = betstring + $" 💸😪 -{bet}֏";
                         await message.ModifyAsync(msg => msg.Content = betstring);
                     }
@@ -84,13 +85,13 @@ namespace VincenzoBot.Modules
                     await message.ModifyAsync(msg => msg.Content = betstring);
                     if (side.Equals("reszka"))
                     {
-                        _userRepo.GiveHaczyks(Context.User, bet);
+                        await _userService.GiveHaczyksAsync(Context.User, bet);
                         betstring = betstring + $" 💰😄 +{bet}֏";
                         await message.ModifyAsync(msg => msg.Content = betstring);
                     }
                     else
                     {
-                        _userRepo.GiveHaczyks(Context.User, -bet);
+                        await _userService.GiveHaczyksAsync(Context.User, -bet);
                         betstring = betstring + $" 💸😪 -{bet}֏";
                         await message.ModifyAsync(msg => msg.Content = betstring);
                     }

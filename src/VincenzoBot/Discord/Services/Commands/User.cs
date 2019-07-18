@@ -31,7 +31,7 @@ namespace VicenzoBot.Modules
             var embed = new EmbedBuilder();
             embed.WithTitle("");
             embed.WithColor(0xFF, 0xFF, 0x80);//TODO kolorek zalezny od rangi
-            embed.WithAuthor("👤 " + Context.User.Username + " - statystyki");//TODO emoji od rangi
+            embed.WithAuthor("👤 " + UserAccountService.GetUsername(Context.User) + " - statystyki");//TODO emoji od rangi
             embed.WithThumbnailUrl(Context.User.GetAvatarUrl());
             embed.AddField("🎬YouTube:", user.Yt_id==null? "Brak!" : user.Yt_id, true);
             embed.AddField("🏆Poziom:", user.Level, true);

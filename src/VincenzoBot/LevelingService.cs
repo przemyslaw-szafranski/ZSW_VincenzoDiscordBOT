@@ -7,9 +7,9 @@ namespace VincenzoBot
 {
     public class LevelingService
     {
-        private readonly UserAccountRepository _userRepo;
+        private readonly IUserAccountRepository _userRepo;
         private readonly ILogger _logger;
-        public LevelingService(UserAccountRepository userRepo, ILogger logger)
+        public LevelingService(IUserAccountRepository userRepo, ILogger logger)
         {
             _userRepo = userRepo;
             _logger = logger;

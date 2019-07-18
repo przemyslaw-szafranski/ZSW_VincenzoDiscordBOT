@@ -19,8 +19,8 @@ namespace VincenzoBot.Modules
         private readonly DiscordLogger _logger;
         private readonly DiscordBotConfig _config;
         private readonly LevelingService _levelingService;
-        private readonly UserAccountRepository _userRepo;
-        public MessageHandlerService(DiscordSocketClient client, DiscordLogger logger, DiscordBotConfig config, LevelingService levelingService, UserAccountRepository userRepo)
+        private readonly IUserAccountRepository _userRepo;
+        public MessageHandlerService(DiscordSocketClient client, DiscordLogger logger, DiscordBotConfig config, LevelingService levelingService, IUserAccountRepository userRepo)
         {
             _config = config;
             _client = client;
@@ -35,22 +35,30 @@ namespace VincenzoBot.Modules
 
         private async Task HandleMessageAsync(SocketMessage arg)
         {
-            if (arg.Channel is SocketDMChannel) { return; }
-            if (arg.Author.IsBot) { return; }
-            var msg = arg as SocketUserMessage;
-            if (msg == null) return;
-            int argPos = 0;
-            var user = _userRepo.GetOrCreateUserAsync(arg.Author);
-            if (!msg.HasStringPrefix(_config.CmdPrefix, ref argPos))
-                await _levelingService.RewardMessage(user.Result, arg.Content);
-            if(await _levelingService.LevelUp(user.Result))
+            try
             {
-                await msg.Channel.SendMessageAsync($"Gratulacje {user.Result.Nickname}, wbiłeś level {user.Result.Level}");
-                return;
+                if (arg.Channel is SocketDMChannel) { return; }
+                if (arg.Author.IsBot) { return; }
+                var msg = arg as SocketUserMessage;
+                if (msg == null) return;
+                int argPos = 0;
+                var user = _userRepo.GetOrCreateUserAsync(arg.Author);
+                if (!msg.HasStringPrefix(_config.CmdPrefix, ref argPos))
+                    await _levelingService.RewardMessage(user.Result, arg.Content);
+                if (await _levelingService.LevelUp(user.Result))
+                {
+                    await msg.Channel.SendMessageAsync($"Gratulacje {user.Result.Nickname}, wbiłeś level {user.Result.Level}");
+                    return;
+                }
+                string respond = checkMessage(arg);
+                if (!respond.Equals(""))
+                    await msg.Channel.SendMessageAsync(respond);
             }
-            string respond = checkMessage(arg);
-            if (!respond.Equals(""))
-                await msg.Channel.SendMessageAsync(respond);
+
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         private string checkMessage(SocketMessage socketMsg)

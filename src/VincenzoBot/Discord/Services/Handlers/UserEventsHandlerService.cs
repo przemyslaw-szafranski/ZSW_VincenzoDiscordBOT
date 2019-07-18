@@ -11,8 +11,8 @@ namespace VincenzoBot
         private readonly DiscordSocketClient _client;
         private readonly DiscordLogger _logger;
         private readonly DiscordBotConfig _config;
-        private readonly UserAccountRepository _userAccountRepository;
-        public UserEventsHandlerService(DiscordSocketClient client, DiscordLogger logger, DiscordBotConfig config, UserAccountRepository userAccountRepository)
+        private readonly IUserAccountRepository _userAccountRepository;
+        public UserEventsHandlerService(DiscordSocketClient client, DiscordLogger logger, DiscordBotConfig config, IUserAccountRepository userAccountRepository)
         {
             _userAccountRepository = userAccountRepository;
             _config = config;

@@ -12,7 +12,7 @@ using VincenzoBot.Storages.Implementations;
 
 namespace VincenzoBot.Discord
 {
-    public class Startup
+    public class ServiceProvider
     {
         private readonly static IServiceProvider _serviceProvider;
 
@@ -32,7 +32,7 @@ namespace VincenzoBot.Discord
             .AddSingleton<CommandService>()
             .AddSingleton<CommandHandlerService>()
             .AddSingleton<DiscordLogger>()
-            .AddSingleton<UserAccountRepository>()
+            .AddSingleton<IUserAccountRepository,UserAccountRepository>()
             .AddSingleton<UserAccountService>()
             .AddSingleton<MessageHandlerService>()
             .AddSingleton<LevelingService>()

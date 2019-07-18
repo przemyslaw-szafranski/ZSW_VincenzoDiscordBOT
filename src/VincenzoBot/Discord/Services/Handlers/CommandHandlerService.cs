@@ -5,7 +5,6 @@ using System.Reflection;
 using VincenzoBot.Discord;
 using System;
 using VincenzoBot.Config;
-using VincenzoBot.Repositories;
 using Serilog;
 
 namespace VincenzoBot
@@ -28,6 +27,7 @@ namespace VincenzoBot
         }
         public async Task InitializeAsync()
         {
+            await _service.AddModulesAsync(assembly: Assembly.GetEntryAssembly(), services: _serviceProvider);
             _client.MessageReceived += HandleCommandAsync;
         }
 
@@ -44,9 +44,13 @@ namespace VincenzoBot
             {
 
                 var result = await _service.ExecuteAsync(context, argPos, services: _serviceProvider);
-                if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
+                if (!result.IsSuccess && result.Error != CommandError.UnknownCommand && result.Error != CommandError.UnmetPrecondition)
                 {
-                    Log.Error(new Exception().Message);
+                    Log.Error(new Exception(result.Error.ToString()), $"{context.User} ({context.Message}) - {result.ErrorReason}");
+                }
+                else if (!result.IsSuccess && result.Error == CommandError.UnmetPrecondition)
+                {
+                    Log.Warning(new Exception(result.Error.ToString()), $"{context.User} ({context.Message}) - {result.ErrorReason}");
                 }
             }
         }

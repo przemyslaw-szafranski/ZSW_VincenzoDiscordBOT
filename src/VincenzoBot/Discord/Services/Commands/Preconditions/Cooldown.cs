@@ -50,8 +50,9 @@ namespace VincenzoBot.Preconditions
                 // Display message if command is on cooldown
                 if (difference.Ticks > 0)
                 {
-                    context.User.SendMessageAsync($"Uspokój się... Poczekaj {difference.ToString(@"mm\:ss")}, zanim znowu użyjesz tej komendy.");
-                    return Task.FromResult(PreconditionResult.FromError($"{context.User.Username} - command {command.Name} cooldown: {difference.ToString(@"mm\:ss")}"));
+                    if(difference.TotalSeconds>5)
+                        context.User.SendMessageAsync($"Uspokój się... Poczekaj {difference.ToString(@"mm\:ss")}, zanim znowu użyjesz tej komendy.");
+                    return Task.FromResult(PreconditionResult.FromError($"Cooldown: {difference.ToString(@"mm\:ss")}"));
                 }
                 // Update cooldown time
                 var time = DateTime.UtcNow.Add(CooldownLength);

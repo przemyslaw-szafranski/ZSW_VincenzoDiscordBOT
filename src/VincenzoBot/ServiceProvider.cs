@@ -25,17 +25,18 @@ namespace VincenzoBot.Discord
             .AddSingleton<ILogger, Logger>()
             .AddSingleton<IDataStorage, JsonStorage>()
             //Discord Stuff
+            .AddSingleton<IUserAccountRepository,UserAccountRepository>()
             .AddSingleton<DiscordBotConfig>()
             .AddSingleton<BotConfigRepository>()
             .AddSingleton<Connection>()
+            .AddSingleton<Admin>()
             .AddSingleton<DiscordSocketClient>()
             .AddSingleton<CommandService>()
-            .AddSingleton<CommandHandlerService>()
             .AddSingleton<DiscordLogger>()
-            .AddSingleton<IUserAccountRepository,UserAccountRepository>()
             .AddSingleton<UserAccountService>()
             .AddSingleton<MessageHandlerService>()
             .AddSingleton<LevelingService>()
+            .AddSingleton<CommandHandlerService>()
             // You can pass in an instance of the desired type
 
             // ...or by using the generic method.

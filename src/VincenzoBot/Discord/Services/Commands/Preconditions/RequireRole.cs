@@ -28,9 +28,9 @@ public class RequireRole : PreconditionAttribute
             // Since it wasn't, fail
             else
 
-                return Task.FromResult(PreconditionResult.FromError($"User {userName} tried to run command without {_name} permission."));
+                return Task.FromResult(PreconditionResult.FromError($"User tried to run command without '{_name}' permission."));
         }
         else
-            return Task.FromResult(PreconditionResult.FromError($"User {userName} tried to run command being out of server."));
+            return Task.FromResult(PreconditionResult.FromError($"User tried to run command being out of server."));
     }
 }

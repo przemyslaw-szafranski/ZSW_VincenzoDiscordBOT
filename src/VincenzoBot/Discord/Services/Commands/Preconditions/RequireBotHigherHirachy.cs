@@ -13,7 +13,7 @@ namespace VincenzoBot.Discord.Services.Commands.Preconditions
 
                 var bot = (context.Guild as SocketGuild).GetUser(context.Client.CurrentUser.Id);
                 if ((user != null) && (bot.Hierarchy < user.Hierarchy))
-                    return Task.FromResult(PreconditionResult.FromError("I don't have enough permissions"));
+                    return Task.FromResult(PreconditionResult.FromError($"User hirachy is lower than parameter user {user.Username}"));
 
                 return Task.FromResult(PreconditionResult.FromSuccess());
             }

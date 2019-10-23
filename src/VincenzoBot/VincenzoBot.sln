@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29201.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VincenzoBot", "VincenzoBot\VincenzoBot.csproj", "{1250B352-235E-49E7-BB40-338FE29FDD09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VincenzoBot.XUnit.Tests", "VincenzoBot.XUnit.Tests\VincenzoBot.XUnit.Tests.csproj", "{88B13C03-D66C-4E92-8D6E-5FA5D237A280}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1250B352-235E-49E7-BB40-338FE29FDD09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1250B352-235E-49E7-BB40-338FE29FDD09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1250B352-235E-49E7-BB40-338FE29FDD09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1250B352-235E-49E7-BB40-338FE29FDD09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88B13C03-D66C-4E92-8D6E-5FA5D237A280}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88B13C03-D66C-4E92-8D6E-5FA5D237A280}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88B13C03-D66C-4E92-8D6E-5FA5D237A280}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88B13C03-D66C-4E92-8D6E-5FA5D237A280}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C360DAF1-2989-4834-A53F-ACB2B942FA7A}
+	EndGlobalSection
+EndGlobal

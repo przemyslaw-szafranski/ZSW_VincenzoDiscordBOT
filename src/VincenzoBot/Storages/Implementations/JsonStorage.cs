@@ -7,6 +7,16 @@ namespace VincenzoBot.Storages.Implementations
 {
     public class JsonStorage : IDataStorage
     {
+        public void DeleteObject(string key)
+        {
+            File.Delete($"{key}.json");    
+        }
+
+        public bool Exists(string filePath)
+        {
+            return File.Exists(filePath);
+        }
+
         public T RestoreObject<T>(string key)
         {
             if (!File.Exists($"{key}.json"))

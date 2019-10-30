@@ -23,7 +23,7 @@ namespace VincenzoBot
            // var storage = Unity.Resolve<IDataStorage>();
             var logger = Unity.Resolve<ILogger>();
             var discordConnection = Unity.Resolve<Connection>();
-            var userAccountRepository = Unity.Resolve<UserAccountRepository>();
+            var userAccountRepository = Unity.Resolve<VincenzoDiscordBot.Repositories.UserAccountRepository>();
             var discordBotConfig = Unity.Resolve<BotConfigRepository>();
             try
             {

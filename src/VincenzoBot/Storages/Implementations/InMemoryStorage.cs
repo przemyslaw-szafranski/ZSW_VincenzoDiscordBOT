@@ -6,6 +6,21 @@ namespace VincenzoBot.Storages
     public class InMemoryStorage : IDataStorage
     {
         private Dictionary<string, object> _dictionary = new Dictionary<string, object>();
+
+        public InMemoryStorage()
+        {
+        }
+
+        public void DeleteObject(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Exists(string filePath)
+        {
+            throw new NotImplementedException();
+        }
+
         public T RestoreObject<T>(string key)
         {
             if (_dictionary.ContainsKey(key))

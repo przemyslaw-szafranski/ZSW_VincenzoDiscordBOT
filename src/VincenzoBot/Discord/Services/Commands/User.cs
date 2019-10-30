@@ -27,7 +27,7 @@ namespace VicenzoBot.Modules
         [Cooldown(10)]
         public async Task MyCard()
         {
-            UserAccount user = _userRepo.GetOrCreateUser(Context.User);
+            UserAccount user = await _userRepo.GetOrCreateUserAsync(Context.User);
             var embed = new EmbedBuilder();
             embed.WithTitle("");
             embed.WithColor(0xFF, 0xFF, 0x80);//TODO kolorek zalezny od rangi
@@ -45,7 +45,7 @@ namespace VicenzoBot.Modules
         [Cooldown(20)]
         public async Task addYouTubeAccount(string ytName)
         {
-            UserAccount user = _userRepo.GetOrCreateUser(Context.User);
+            UserAccount user = await _userRepo.GetOrCreateUserAsync(Context.User);
             if (ytName == null || ytName == "" || ytName.Length <= 2 || ytName.Length > 20)
             {
                 await Context.User.SendMessageAsync($"Coś Ci się chyba z tym kontem YouTube pomyliło (**{ytName}**) :face_palm:");

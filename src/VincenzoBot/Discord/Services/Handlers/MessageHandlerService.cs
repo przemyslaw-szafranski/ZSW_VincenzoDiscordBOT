@@ -40,12 +40,12 @@ namespace VincenzoBot.Modules
             var msg = arg as SocketUserMessage;
             if (msg == null) return;
             int argPos = 0;
-            var user = _userRepo.GetOrCreateUser(arg.Author);
+            var user = _userRepo.GetOrCreateUserAsync(arg.Author);
             if (!msg.HasStringPrefix(_config.CmdPrefix, ref argPos))
-                await _levelingService.RewardMessage(user, arg.Content);
-            if(await _levelingService.LevelUp(user))
+                await _levelingService.RewardMessage(user.Result, arg.Content);
+            if(await _levelingService.LevelUp(user.Result))
             {
-                await msg.Channel.SendMessageAsync($"Gratulacje {user.Nickname}, wbiłeś level {user.Level}");
+                await msg.Channel.SendMessageAsync($"Gratulacje {user.Result.Nickname}, wbiłeś level {user.Result.Level}");
                 return;
             }
             string respond = checkMessage(arg);

@@ -35,7 +35,12 @@ namespace VincenzoBot
         {
             if (gUser.IsBot || gUser.IsWebhook) return;
             SocketUser user = gUser;
-            _userAccountRepository.CreateUserAccount(user);
+            await _userAccountRepository.CreateUserAccountAsync(user);
+        }
+        private async Task HandleUserUpdatedAsync(SocketUser user, SocketGuild guild)
+        {
+            if (user.IsBot || user.IsWebhook) return;
+                _userAccountRepository.RemoveUser(user.Id);
         }
         private async Task HandleUserBannedAsync(SocketUser user, SocketGuild guild)
         {

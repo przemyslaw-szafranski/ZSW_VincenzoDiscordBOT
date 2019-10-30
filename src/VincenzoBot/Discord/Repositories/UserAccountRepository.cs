@@ -81,7 +81,7 @@ namespace VincenzoBot.Repositories
         {
             return _accounts;
         }
-        public UserAccount CreateUserAccount(SocketUser user)
+        public async Task<UserAccount> CreateUserAccountAsync(SocketUser user)
         {
             _logger.Log("Creating user: " + user.Username);
             var newAccount = new UserAccount()
@@ -90,7 +90,7 @@ namespace VincenzoBot.Repositories
                 Nickname = user.Username
             };
             _accounts.Add(newAccount);
-            SaveAccount(newAccount);
+            await SaveAccount(newAccount);
             return newAccount;
         }
         public async Task SaveAccounts()
@@ -105,7 +105,7 @@ namespace VincenzoBot.Repositories
         public async Task SaveAccount(SocketUser socketUser)
         {
             _logger.Log("Saving user: " + socketUser.Username);
-            UserAccount user = GetOrCreateUser(socketUser);
+            UserAccount user = await GetOrCreateUserAsync(socketUser);
              _storage.StoreObject(user, Constants.USERACCOUNTS_FOLDER + $"/{user.Nickname}");
         }
         public async Task SaveAccount(UserAccount user)
@@ -113,18 +113,28 @@ namespace VincenzoBot.Repositories
             _logger.Log("Saving user: " + user.Nickname);
            _storage.StoreObject(user, Constants.USERACCOUNTS_FOLDER + $"/{user.Nickname}");
         }
-        public UserAccount GetOrCreateUser(SocketUser user)
+        public async Task<UserAccount> GetOrCreateUserAsync(SocketUser user)
         {
-            var result = from a in _accounts
-                         where a.Id == user.Id
-                         select a;
-            if (result.FirstOrDefault() == null)
+            UserAccount result = _accounts.Where(i => i.Id==user.Id).FirstOrDefault();
+            var guildUser = user as SocketGuildUser;
+            if (result.Nickname != guildUser.Nickname && guildUser.Nickname!=null)
+                await UpdateUserFileAndNicknameAsync(result,guildUser.Nickname);
+            if (result == null)
             {
-                var newUser = CreateUserAccount(user);
-                return newUser;
+                var newUser = CreateUserAccountAsync(user);
+                return newUser.Result;
             }
-            return result.First();
+            return result;
         }
+
+        public async Task UpdateUserFileAndNicknameAsync(UserAccount user, string nickname)
+        {
+            _storage.UpdateObject(user, Constants.USERACCOUNTS_FOLDER + $"/{user.Nickname}", Constants.USERACCOUNTS_FOLDER + $"/{nickname}");
+            _logger.Log($"Changing file an nickname of user: {user.Nickname} to {nickname}");
+            user.Nickname = nickname;
+            await SaveAccount(user);
+        }
+
         public UserAccount GetUserById(ulong id)
         {
             foreach (UserAccount a in _accounts)

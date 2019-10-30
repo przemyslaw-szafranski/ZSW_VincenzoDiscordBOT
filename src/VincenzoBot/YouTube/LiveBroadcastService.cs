@@ -22,7 +22,6 @@ namespace VincenzoBot.Services
             List<JToken> thumbnailsURLs = broadcastsAllInfo["items"].Children()["snippet"]["thumbnails"]["default"]["url"].ToList();
             for(int i = 0;i< liveChatIds.Count;i++)
                 _broadcasts.Add(new LiveBroadcastModel(liveChatIds[i].ToString(), titles[i].ToString(), thumbnailsURLs[i].ToString()));
-            int g = 0;
         }
     }
 }

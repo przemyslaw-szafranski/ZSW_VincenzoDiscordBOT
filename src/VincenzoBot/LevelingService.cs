@@ -24,7 +24,7 @@ namespace VincenzoBot
                 uint xp = (uint)randObj.Next((int)(1000/Constants.LEVELING_DIFFICULTY), (int)(2500 /Constants.LEVELING_DIFFICULTY));
                 user.Xp += xp;
                 user.LastMessage = DateTime.Now;
-                _userRepo.SaveAccount(user);
+                await _userRepo.SaveAccount(user);
                 _logger.Log($"Giving user {user.Nickname} {xp} exp!");
 
             }
@@ -40,7 +40,7 @@ namespace VincenzoBot
             {
                 user.Level++;
                 user.Xp -= expNeededToLevel;
-                _userRepo.SaveAccount(user);
+                await _userRepo.SaveAccount(user);
                 _logger.Log($"User {user.Nickname} leveled up to {user.Level} level!");
                 return true;
             }

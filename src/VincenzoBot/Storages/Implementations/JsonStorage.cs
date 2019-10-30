@@ -34,6 +34,14 @@ namespace VincenzoBot.Storages.Implementations
             File.WriteAllText(file, json);
         }
 
+        public void UpdateObject(object obj, string oldPath, string newPath)
+        {
+            if (Exists($"{oldPath}.json"))
+                File.Move($"{oldPath}.json", $"{newPath}.json");
+            else
+                throw new NullReferenceException("Path of old object doesnt exist.");
+        }
+
         public static implicit operator JsonStorage(Mock<JsonStorage> v)
         {
             return v;

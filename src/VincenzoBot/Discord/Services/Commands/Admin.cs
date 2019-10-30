@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VincenzoBot.Preconditions;
+using VincenzoBot.Repositories;
 using VincenzoBot.Services.Discord;
 
 namespace VincenzoBot.Modules
@@ -14,6 +15,19 @@ namespace VincenzoBot.Modules
     //Commands which are about user information
     public class Admin : ModuleBase<SocketCommandContext>
     {
+        private readonly UserAccountRepository _userRepo;
+        public Admin(UserAccountRepository userRepo)
+        {
+            _userRepo = userRepo;
+        }
+
+        [Command("saveAccounts"), Alias("saccounts", "savea")]
+        public async Task SaveAccounts()
+        {
+            await Context.Message.DeleteAsync();
+            await _userRepo.SaveAccounts();
+            await Context.Channel.SendMessageAsync("*Vincenzo zamyka kartotekę i chowa do szuflady*\nZapisałem ich dane... Którego odstrzelimy?");
+        }
         //TODO update czyjes yt
         //TODO logger tych komend
         [Command("announce")]

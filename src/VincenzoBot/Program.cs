@@ -7,12 +7,11 @@ namespace VincenzoBot
 {
     internal class Program
     {
-        private static IServiceProvider _serviceProvider;
         private static async Task Main(string[] args)
         {
             //Create list of dependencies
+            IServiceProvider _serviceProvider = Startup.GetServiceProvider();
             _serviceProvider = Startup.BuildServiceProvider();
-            // Unity.RegisterTypes();
             var discordConnection = _serviceProvider.GetRequiredService<Connection>();
             var logger = _serviceProvider.GetRequiredService<ILogger>();
             // var userAccountRepository = Unity.Resolve<VincenzoDiscordBot.Repositories.UserAccountRepository>();

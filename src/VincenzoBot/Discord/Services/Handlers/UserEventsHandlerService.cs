@@ -1,9 +1,6 @@
-﻿using Discord.Commands;
-using Discord.WebSocket;
+﻿using Discord.WebSocket;
 using System.Threading.Tasks;
-using System.Reflection;
 using VincenzoBot.Discord;
-using System;
 using VincenzoBot.Config;
 using VincenzoBot.Repositories;
 
@@ -28,7 +25,7 @@ namespace VincenzoBot
             _client.UserIsTyping += HandleUserTypingAsync;
             _client.UserJoined += HandleUserJoinedAsync;
             _client.UserBanned += HandleUserBannedAsync;
-            //_client.UserUpdated;
+
         }
         private async Task HandleUserTypingAsync(SocketUser user, ISocketMessageChannel channel)
         {

@@ -4,7 +4,7 @@ using System;
 using System.Threading.Tasks;
 using VincenzoBot;
 
-namespace VincenzoDiscordBot.Discord
+namespace VincenzoBot.Discord
 {
     public class DiscordLogger
     {

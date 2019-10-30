@@ -4,7 +4,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
-namespace VicenzoDiscordBot.Preconditions
+namespace VincenzoBot.Preconditions
 {
     public class Cooldown : PreconditionAttribute
     {

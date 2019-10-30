@@ -6,10 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VicenzoDiscordBot.Preconditions;
-using VincenzoDiscordBot.Services.Discord;
+using VincenzoBot.Preconditions;
+using VincenzoBot.Services.Discord;
 
-namespace VicenzoDiscordBot.Modules
+namespace VincenzoBot.Modules
 {
     //Commands which are about user information
     public class Admin : ModuleBase<SocketCommandContext>

@@ -1,8 +1,7 @@
 ﻿using System;
 using Moq;
-using VincenzoBot;
 
-namespace VincenzoDiscordBot
+namespace VincenzoBot
 {
     public class Logger :ILogger
     {

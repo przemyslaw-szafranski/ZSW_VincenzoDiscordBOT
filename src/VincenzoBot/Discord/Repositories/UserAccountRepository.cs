@@ -7,10 +7,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using VincenzoBot;
 using VincenzoBot.Storages;
-using VincenzoDiscordBot.Discord;
-using VincenzoDiscordBot.Models;
+using VincenzoBot.Discord;
+using VincenzoBot.Models;
 
-namespace VincenzoDiscordBot.Repositories
+namespace VincenzoBot.Repositories
 {
     public class UserAccountRepository
     {

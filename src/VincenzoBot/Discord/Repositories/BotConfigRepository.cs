@@ -1,12 +1,9 @@
-﻿using System;
-using Newtonsoft.Json;
-using System.IO;
-using VincenzoDiscordBot;
+﻿using VincenzoBot;
 using VincenzoBot.Storages;
-using VincenzoDiscordBot.Discord;
-using VincenzoDiscordBot.Entities;
+using VincenzoBot.Discord;
+using VincenzoBot.Config;
 
-namespace VicenzoDiscordBot
+namespace VincenzoBot
 {
     public class BotConfigRepository
     {

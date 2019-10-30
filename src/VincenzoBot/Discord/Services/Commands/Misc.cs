@@ -3,10 +3,10 @@ using Discord.Commands;
 using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
-using VicenzoDiscordBot.Preconditions;
-using VincenzoDiscordBot.Entities;
+using VincenzoBot.Preconditions;
+using VincenzoBot.Config;
 
-namespace VicenzoDiscordBot.Modules
+namespace VincenzoBot.Modules
 {
     public class Misc : ModuleBase<SocketCommandContext>
     {

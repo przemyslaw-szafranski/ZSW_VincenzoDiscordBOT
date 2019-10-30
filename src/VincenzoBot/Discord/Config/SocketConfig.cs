@@ -1,7 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
 
-namespace VincenzoDiscordBot.Discord.Entities
+namespace VincenzoBot.Config
 {
     public static class SocketConfig
     {

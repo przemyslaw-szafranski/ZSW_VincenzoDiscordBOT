@@ -2,17 +2,16 @@
 using Discord.WebSocket;
 using System.Threading.Tasks;
 using System.Reflection;
-using VincenzoDiscordBot.Discord;
+using VincenzoBot.Discord;
 using System;
-using VincenzoDiscordBot.Entities;
-using VincenzoDiscordBot.Repositories;
+using VincenzoBot.Config;
+using VincenzoBot.Repositories;
 
-namespace VicenzoDiscordBot
+namespace VincenzoBot
 {
     class UserEventsHandlerService
     {
         private readonly DiscordSocketClient _client;
-        private CommandService _service;
         private readonly DiscordLogger _logger;
         private readonly DiscordBotConfig _config;
         private readonly UserAccountRepository _userAccountRepository;

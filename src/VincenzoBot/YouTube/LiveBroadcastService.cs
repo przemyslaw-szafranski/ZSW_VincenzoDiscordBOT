@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VincenzoDiscordBot.Models;
+using VincenzoBot.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace VincenzoDiscordBot.Services
+namespace VincenzoBot.Services
 {
     class LiveBroadcastService
     {

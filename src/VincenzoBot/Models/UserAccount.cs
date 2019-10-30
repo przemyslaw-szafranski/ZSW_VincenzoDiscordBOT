@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VincenzoDiscordBot.Models
+namespace VincenzoBot.Models
 {
     public class UserAccount
     {

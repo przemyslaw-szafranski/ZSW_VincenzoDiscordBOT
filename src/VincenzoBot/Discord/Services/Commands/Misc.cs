@@ -39,10 +39,10 @@ namespace VincenzoBot.Modules
                 Title = $"Help for '{query}'"
             };
 
-          //  var result = _service.Search(Context, query);
+            var result = _service.Search(Context, query);
             if (query.StartsWith("module "))
-                query = query.Remove(0, "module ".Length);
-          //  var emb = result.IsSuccess ? HelpCommand(result, builder) : await HelpModule(query, builder);
+               query = query.Remove(0, "module ".Length);
+            var emb = result.IsSuccess ? HelpCommand(result, builder) : await HelpModule(query, builder);
 
             if (emb.Fields.Length == 0)
             {

@@ -6,7 +6,7 @@ namespace VincenzoBot.Models
     {
         public ulong Id { get; set; }
         public string Nickname { get; set; }
-        public DateTime LastDaily { get; set; } = DateTime.UtcNow.AddDays(-2);
+        public DateTime LastDaily { get; set; } = DateTime.UtcNow.AddDays(-1);
         public DateTime LastMessage { get; set; } = DateTime.UtcNow;
         public string Yt_id { get; set; } = null;
         //last visit date

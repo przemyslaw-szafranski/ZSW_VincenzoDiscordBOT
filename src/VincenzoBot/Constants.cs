@@ -12,7 +12,8 @@ namespace VincenzoBot
         public const int WELCOME_HACZYKS = 10;
         public const int LIVE_BROADCASTS_RESULTS = 5;
         public const uint LEVELING_DIFFICULTY = 100;
-        public const ulong DailyMuiniesGain = 250;
+        public const int DAILY_HACZYKS_GAIN = 50;
+        public const int COIN_MAX_BET = 50;
         public const int MESSAGE_REWARD_COOLDOWN = 60;
         public const int MESSAGE_REWARD_MIN_LENGTH = 15;
         public const int MaxMessageLength = 2000;

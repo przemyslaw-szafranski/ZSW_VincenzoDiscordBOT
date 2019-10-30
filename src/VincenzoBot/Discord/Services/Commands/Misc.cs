@@ -5,6 +5,7 @@ using System;
 using System.Threading.Tasks;
 using VincenzoBot.Preconditions;
 using VincenzoBot.Config;
+using VincenzoBot.Discord.Services.Commands.Preconditions;
 
 namespace VincenzoBot.Modules
 {
@@ -24,9 +25,16 @@ namespace VincenzoBot.Modules
         }
         [Command("users")]
         [Cooldown(5)]
+        [DeleteCommandUsage]
         public async Task HowManyMembers()
         {
-            await Context.Channel.SendMessageAsync($"Serwer liczy {Context.Guild.MemberCount} ludzi");
+            int count = 0;
+            foreach(SocketGuildUser user in Context.Guild.Users)
+            {
+                if (!user.IsBot && !user.IsWebhook)
+                    count++;
+            }
+            await Context.Channel.SendMessageAsync($"Serwer liczy {count} ludzi");
         }
         [Command("help"), Alias("h")]
         [Remarks("Shows what a specific command or module does and what parameters it takes.")]

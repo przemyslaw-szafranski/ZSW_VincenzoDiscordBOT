@@ -6,6 +6,7 @@ using VincenzoBot.Discord;
 using System;
 using VincenzoBot.Config;
 using VincenzoBot.Repositories;
+using Serilog;
 
 namespace VincenzoBot
 {
@@ -27,43 +28,27 @@ namespace VincenzoBot
         }
         public async Task InitializeAsync()
         {
-            await _service.AddModulesAsync(assembly: Assembly.GetEntryAssembly(),services: _serviceProvider);
-            try
-            {
-                _client.MessageReceived += HandleCommandAsync;
-            }
-            catch(Exception e)
-            {
-                throw e;
-            }
+            _client.MessageReceived += HandleCommandAsync;
         }
 
         private async Task HandleCommandAsync(SocketMessage arg)
         {
 
-          if (arg.Channel is SocketDMChannel) { return; }
+            if (arg.Channel is SocketDMChannel) { return; }
             if (arg.Author.IsBot) { return; }
             var msg = arg as SocketUserMessage;
             if (msg == null) return;
             var context = new SocketCommandContext(_client, msg);
             int argPos = 0;
-            if(msg.HasStringPrefix(_config.CmdPrefix, ref argPos) || msg.HasMentionPrefix(_client.CurrentUser, ref argPos)) //if you use a prefix or mention a bot @Vincenzo command 
+            if (msg.HasStringPrefix(_config.CmdPrefix, ref argPos) || msg.HasMentionPrefix(_client.CurrentUser, ref argPos)) //if you use a prefix or mention a bot @Vincenzo command 
             {
-                try
-                {
-                    var result = await _service.ExecuteAsync(context, argPos, services: _serviceProvider);
-                    if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
-                    {
-                        throw new Exception();
-                    }
-                }
-                catch(Exception e)
-                {
-                    await _logger.Log("EXCEPTION: " +e.Message);
-                }
 
+                var result = await _service.ExecuteAsync(context, argPos, services: _serviceProvider);
+                if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
+                {
+                    Log.Error(new Exception().Message);
+                }
             }
         }
-
     }
 }

@@ -52,7 +52,7 @@ namespace VincenzoBot.Modules
         public async Task SetGame([Remainder] string gamename)
         {
             await Context.Client.SetGameAsync(gamename);
-            await SendLogToChannel($"{Context.User.Username} changed game to `{gamename}`");
+            await SendLogToChannel($"{UserAccountService.GetUsername(Context.User)} changed game to `{gamename}`");
         }
 
         #region Ordnung
@@ -62,8 +62,8 @@ namespace VincenzoBot.Modules
         [RequireUserPermission(GuildPermission.BanMembers)]
         public async Task Ban([NoSelf][RequireBotHigherHirachy] IGuildUser user, [Remainder] string reason=null)
         {
-            await SendLogToChannel($"{Context.User.Username} has banned user {user.Mention} `{reason}`");
-            _logger.Log($"{Context.User.Username} has banned user {user.Username + user.Id}{reason}");
+            await SendLogToChannel($"{UserAccountService.GetUsername(Context.User)} has banned user {user.Mention} `{reason}`");
+            _logger.Log($"{UserAccountService.GetUsername(Context.User)} has banned user {user.Username + user.Id}{reason}");
             await Context.Guild.AddBanAsync(user);
         }
 
@@ -76,8 +76,8 @@ namespace VincenzoBot.Modules
             if (user.IsBot || user.IsWebhook) return;
             await user.SendMessageAsync($"Zostałeś wyrzucony z serwera **{Context.Guild.Name}**, powód: `{reason}`\nUważaj, bo następnym razem osobiście Cię sprzątnę...");
             await user.SendMessageAsync("http://media1.giphy.com/media/Pu3MzS917wZHi/giphy.gif");
-            await SendLogToChannel($"{Context.User.Username} has kicked user {user.Mention} `{reason}`");
-            _logger.Log($"{Context.User.Username} has kicked user {user.Username + user.Id}{reason}");
+            await SendLogToChannel($"{UserAccountService.GetUsername(Context.User)} has kicked user {user.Mention} `{reason}`");
+            _logger.Log($"{UserAccountService.GetUsername(Context.User)} has kicked user {user.Username + user.Id}{reason}");
             await user.KickAsync(reason);
         }
         [Command("mute")]
@@ -86,8 +86,8 @@ namespace VincenzoBot.Modules
         [RequireUserPermission(GuildPermission.MuteMembers)]
         public async Task Mute([NoSelf][RequireBotHigherHirachy] IGuildUser user, [Remainder]string reason=null)
         {
-            await SendLogToChannel($"{Context.User.Username} has muted user {user.Mention} `{reason}`");
-            _logger.Log($"{Context.User.Username} has muted user {user.Username + user.Id} {reason}");
+            await SendLogToChannel($"{UserAccountService.GetUsername(Context.User)} has muted user {user.Mention} `{reason}`");
+            _logger.Log($"{UserAccountService.GetUsername(Context.User)} has muted user {user.Username + user.Id} {reason}");
             await Context.Channel.SendMessageAsync($"*Vincenzo zakneblował buzię {user.Mention}*, powód: `{reason}`");
             await user.SendMessageAsync($"*Vincenzo zakneblował Ci buzię*, powód: `{reason}`\nhttps://d.wattpad.com/story_parts/663262466/images/156dd45d110b244a348680547166.gif");
             var muteRole = await GetMuteRole(user.Guild);
@@ -101,8 +101,8 @@ namespace VincenzoBot.Modules
         [RequireUserPermission(GuildPermission.MuteMembers)]
         public async Task Unmute([NoSelf] IGuildUser user)
         {
-            await SendLogToChannel($"{Context.User.Username} has unmuted user {user.Mention}");
-            _logger.Log($"{Context.User.Username} has unmuted user {user.Username + user.Id}");
+            await SendLogToChannel($"{UserAccountService.GetUsername(Context.User)} has unmuted user {user.Mention}");
+            _logger.Log($"{UserAccountService.GetUsername(Context.User)} has unmuted user {user.Username + user.Id}");
             await Context.Channel.SendMessageAsync($"*Vincenzo zerwał knebel z buzi {user.Mention}*\nEhh... Szkoda, dopiero się rozkręcałem!");
             try { await user.RemoveRoleAsync(await GetMuteRole(user.Guild)).ConfigureAwait(false); } catch { }
         }
@@ -134,20 +134,18 @@ namespace VincenzoBot.Modules
         #endregion Ordnung
 
         [RequireOwner]
-        //[RequireRoleAttribute("Admin")]
+        [RequireRole("Admin")]
         [Command("write")]
         [Summary("Echoes a message.")]
-        public async Task Write(string msg, string ch = "0")
+        public async Task Write(string msg, SocketTextChannel ch=null)
         {
-
-            ulong uch = UInt64.Parse(ch);
-            if (ch.Equals("0") || Context.Guild.GetChannel(uch) == null)
-                await Context.Channel.SendMessageAsync(msg);
-            else
-            {
-                var channel = Context.Guild.GetChannel(uch) as ISocketMessageChannel;
-                await channel.SendMessageAsync(msg);
-            }
+                if (ch == null)
+                    await Context.Channel.SendMessageAsync(msg);
+                else
+                {
+                    await ch.SendMessageAsync(msg);
+                }
+            
         }
 
         [RequireOwner]

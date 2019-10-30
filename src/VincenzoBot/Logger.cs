@@ -14,10 +14,5 @@ namespace VincenzoBot
             Console.WriteLine($"{caller}: {msg}");
             Console.ResetColor();
         }
-
-        public static implicit operator Logger(Mock<Logger> v)
-        {
-            return v;
-        }
     }
 }

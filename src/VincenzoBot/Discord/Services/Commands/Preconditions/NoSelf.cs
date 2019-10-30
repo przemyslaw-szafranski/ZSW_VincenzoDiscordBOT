@@ -11,7 +11,7 @@ namespace VincenzoBot.Preconditions
         {
             var user = value is IUser ? (IUser)value : null;
             if ((user != null) && (context.User.Id == user.Id))
-                return Task.FromResult(PreconditionResult.FromError("You can't use this command on yourself"));
+                return Task.FromResult(PreconditionResult.FromError("User used this command on himself."));
 
             return Task.FromResult(PreconditionResult.FromSuccess());
         }

@@ -17,11 +17,11 @@ namespace VincenzoBot.Modules
     //Commands which are about user information
     public class Admin : ModuleBase<SocketCommandContext>
     {
-        private readonly UserAccountRepository _userRepo;
+        private readonly IUserAccountRepository _userRepo;
         private readonly BotConfigRepository _configRepo;
         private readonly ILogger _logger;
         private static readonly OverwritePermissions denyOverwrite = new OverwritePermissions(addReactions: PermValue.Deny, sendMessages: PermValue.Deny, attachFiles: PermValue.Deny);
-        public Admin(UserAccountRepository userRepo, BotConfigRepository config, ILogger logger)
+        public Admin(IUserAccountRepository userRepo, BotConfigRepository config, ILogger logger)
         {
             _userRepo = userRepo;
             _configRepo = config;
@@ -123,8 +123,8 @@ namespace VincenzoBot.Modules
 
         }
 
-        [Command("clear", RunMode = RunMode.Async)]
         [DeleteCommandUsage]
+        [Command("clear", RunMode = RunMode.Async)]
         [Remarks("Clears An Amount Of Messages")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         public async Task Clear(int amountOfMessagesToDelete)
@@ -133,9 +133,10 @@ namespace VincenzoBot.Modules
         }
         #endregion Ordnung
 
-        [RequireOwner]
-        [RequireRole("Admin")]
+        [DeleteCommandUsage]
         [Command("write")]
+        [RequireRole("Admin")]
+        [Cooldown(2)]
         [Summary("Echoes a message.")]
         public async Task Write(string msg, SocketTextChannel ch=null)
         {

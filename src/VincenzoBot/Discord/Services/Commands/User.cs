@@ -18,8 +18,8 @@ namespace VicenzoBot.Modules
     //Commands which are about user information
     public class User : ModuleBase<SocketCommandContext>
     {
-        private readonly UserAccountRepository _userRepo;
-        public User(UserAccountRepository userRepo)
+        private readonly IUserAccountRepository _userRepo;
+        public User(IUserAccountRepository userRepo)
         {
             _userRepo = userRepo;
         }

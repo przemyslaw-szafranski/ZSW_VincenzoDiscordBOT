@@ -2,12 +2,15 @@
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace VincenzoBot.Storages.Implementations
 {
     public class JsonStorage : IDataStorage
     {
+
+        char[] illegalChars = { '\\', '"', '?', ':', '*', '|', '<', '>' };
         public void DeleteObject(string key)
         {
             File.Delete($"{key}.json");    
@@ -15,11 +18,12 @@ namespace VincenzoBot.Storages.Implementations
 
         public bool Exists(string filePath)
         {
-            return File.Exists(filePath);
+            return File.Exists(filePath.Replace("\"", "").Trim(illegalChars) + ".json");
         }
 
         public T RestoreObject<T>(string key)
         {
+            key = key.Replace("\"", "").Trim(illegalChars);
             if (!File.Exists($"{key}.json"))
                 return default;
             var json = File.ReadAllText($"{key}.json");
@@ -28,6 +32,7 @@ namespace VincenzoBot.Storages.Implementations
 
         public void StoreObject(object obj, string key)
         {
+            key = key.Replace("\"", "").Trim(illegalChars);
             var file = $"{key}.json";
             Directory.CreateDirectory(Path.GetDirectoryName(file));
             var json = JsonConvert.SerializeObject(obj, Formatting.Indented);
@@ -36,8 +41,9 @@ namespace VincenzoBot.Storages.Implementations
 
         public void UpdateObject(object obj, string oldPath, string newPath)
         {
-            if (Exists($"{oldPath}.json"))
-                File.Move($"{oldPath}.json", $"{newPath}.json");
+            newPath = newPath.Replace("\"", "").Trim(illegalChars);
+            if (Exists($"{oldPath}"))
+                File.Move($"{oldPath}.json", ($"{newPath}.json"));
             else
                 throw new NullReferenceException("Path of old object doesnt exist.");
         }

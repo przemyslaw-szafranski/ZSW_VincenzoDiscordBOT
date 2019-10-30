@@ -25,6 +25,7 @@ namespace VincenzoBot
             _client.UserIsTyping += HandleUserTypingAsync;
             _client.UserJoined += HandleUserJoinedAsync;
             _client.UserBanned += HandleUserBannedAsync;
+            _client.UserUpdated += HandleUserUpdatedAsync;
 
         }
         private async Task HandleUserTypingAsync(SocketUser user, ISocketMessageChannel channel)
@@ -47,8 +48,12 @@ namespace VincenzoBot
             if (user.IsBot || user.IsWebhook) return;
             _userAccountRepository.RemoveUser(user.Id);
         }
-
-
-
+        private async Task HandleUserUpdatedAsync(SocketUser arg1, SocketUser arg2)
+        {
+            var oldUser = arg1 as SocketGuildUser;
+            var newUser = arg2 as SocketGuildUser;
+            if (oldUser.Username != newUser.Username)
+                _userAccountRepository.UpdateUserFileAndNickname(oldUser);
+        }
     }
 }

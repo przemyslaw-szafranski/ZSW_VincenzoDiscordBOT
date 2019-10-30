@@ -104,8 +104,8 @@ namespace VincenzoBot.Repositories
         }
         public async Task SaveAccount(SocketUser socketUser)
         {
-            _logger.Log("Saving user: " + socketUser.Username);
             UserAccount user = await GetOrCreateUserAsync(socketUser);
+            _logger.Log("Saving user: " + socketUser.Username);
              _storage.StoreObject(user, Constants.USERACCOUNTS_FOLDER + $"/{user.Nickname}");
         }
         public async Task SaveAccount(UserAccount user)
@@ -117,8 +117,11 @@ namespace VincenzoBot.Repositories
         {
             UserAccount result = _accounts.Where(i => i.Id==user.Id).FirstOrDefault();
             var guildUser = user as SocketGuildUser;
-            if (result.Nickname != guildUser.Nickname && guildUser.Nickname!=null)
-                await UpdateUserFileAndNicknameAsync(result,guildUser.Nickname);
+            if(guildUser.Nickname == null && !_storage.Exists(Constants.USERACCOUNTS_FOLDER + $"/{user.Username}"))
+                await UpdateUserFileAndNicknameAsync(result, user.Username);
+            else if (guildUser.Nickname!=null && user.Username != guildUser.Nickname && user.Id == guildUser.Id
+                && !_storage.Exists(Constants.USERACCOUNTS_FOLDER + $"/{guildUser.Nickname}"))
+                    await UpdateUserFileAndNicknameAsync(result, guildUser.Nickname);
             if (result == null)
             {
                 var newUser = CreateUserAccountAsync(user);
@@ -129,12 +132,16 @@ namespace VincenzoBot.Repositories
 
         public async Task UpdateUserFileAndNicknameAsync(UserAccount user, string nickname)
         {
-            _storage.UpdateObject(user, Constants.USERACCOUNTS_FOLDER + $"/{user.Nickname}", Constants.USERACCOUNTS_FOLDER + $"/{nickname}");
+
             _logger.Log($"Changing file an nickname of user: {user.Nickname} to {nickname}");
+            _storage.UpdateObject(user, Constants.USERACCOUNTS_FOLDER + $"/{user.Nickname}", Constants.USERACCOUNTS_FOLDER + $"/{nickname}");
             user.Nickname = nickname;
             await SaveAccount(user);
         }
-
+        public void UpdateUserFileAndNickname(SocketUser socketUser)
+        {
+            _ = GetOrCreateUserAsync(socketUser).Result;
+        }
         public UserAccount GetUserById(ulong id)
         {
             foreach (UserAccount a in _accounts)

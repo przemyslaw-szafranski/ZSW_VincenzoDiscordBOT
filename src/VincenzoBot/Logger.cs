@@ -1,0 +1,18 @@
+﻿using System;
+using VincenzoBot;
+
+namespace VincenzoDiscordBot
+{
+    public class Logger :ILogger
+    {
+        public void Log(string msg, [System.Runtime.CompilerServices.CallerMemberName] string caller="")
+        {
+            if (caller.Equals("Discord"))
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            if (msg.Contains("EXCEPTION: "))
+                Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"{caller}: {msg}");
+            Console.ResetColor();
+        }
+    }
+}

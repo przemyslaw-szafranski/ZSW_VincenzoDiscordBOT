@@ -1,4 +1,5 @@
 ﻿using System;
+using Moq;
 using VincenzoBot;
 
 namespace VincenzoDiscordBot
@@ -13,6 +14,11 @@ namespace VincenzoDiscordBot
                 Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"{caller}: {msg}");
             Console.ResetColor();
+        }
+
+        public static implicit operator Logger(Mock<Logger> v)
+        {
+            return v;
         }
     }
 }

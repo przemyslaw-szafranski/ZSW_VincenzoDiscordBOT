@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Moq;
+using Newtonsoft.Json;
+using System;
 using System.IO;
 
 namespace VincenzoBot.Storages.Implementations
@@ -19,6 +21,11 @@ namespace VincenzoBot.Storages.Implementations
             Directory.CreateDirectory(Path.GetDirectoryName(file));
             var json = JsonConvert.SerializeObject(obj, Formatting.Indented);
             File.WriteAllText(file,json);
+        }
+
+        public static implicit operator JsonStorage(Mock<JsonStorage> v)
+        {
+            return v;
         }
     }
 }

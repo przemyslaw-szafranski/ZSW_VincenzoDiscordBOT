@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Moq;
 using System;
 using System.Threading.Tasks;
 using VincenzoBot;
@@ -21,6 +22,11 @@ namespace VincenzoDiscordBot.Discord
         {
             _logger.Log(logMsg, "Discord");
             return Task.CompletedTask;
+        }
+
+        public static implicit operator DiscordLogger(Mock<DiscordLogger> v)
+        {
+            return v;
         }
     }
 }

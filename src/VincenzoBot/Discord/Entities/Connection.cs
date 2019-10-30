@@ -3,6 +3,7 @@ using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
 using VicenzoDiscordBot;
+using VicenzoDiscordBot.Modules;
 using VincenzoDiscordBot.Entities;
 
 namespace VincenzoDiscordBot.Discord.Entities
@@ -11,8 +12,8 @@ namespace VincenzoDiscordBot.Discord.Entities
     {
         private readonly DiscordSocketClient _client;
         private readonly DiscordLogger _logger;
-        private MessageHandlerService _handler;
-
+        private CommandHandlerService _commandHandler;
+        private MessageHandlerService _messageHandler;
         public Connection(DiscordLogger logger, DiscordSocketClient client)
         {
             _logger = logger;
@@ -20,8 +21,8 @@ namespace VincenzoDiscordBot.Discord.Entities
         }
         internal async Task ConnectAsync(DiscordBotConfig config)
         {
-            _handler = new MessageHandlerService(_client, _logger, config);
-
+            _commandHandler = new CommandHandlerService(_client, _logger, config);
+            _messageHandler = new MessageHandlerService(_client, _logger, config);
             _client.Log += _logger.Log;
            // _client.Ready += Ready;
             if (config.Token == null || config.Token == "")
@@ -34,7 +35,8 @@ namespace VincenzoDiscordBot.Discord.Entities
             }
             await _client.LoginAsync(TokenType.Bot, config.Token);
             await _client.StartAsync();
-            await _handler.InitializeAsync();
+            await _commandHandler.InitializeAsync();
+            _messageHandler.Initialize();
             await Task.Delay(-1);
         }
     }

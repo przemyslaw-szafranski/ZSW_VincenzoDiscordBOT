@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VincenzoBot", "VincenzoBot.csproj", "{FCB965CA-77A0-43E4-9512-2C9BC03ECD25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VincenzoBot.XUnit.Tests", "..\Vincenzo\src\VincenzoBot.XUnit.Tests\VincenzoBot.XUnit.Tests.csproj", "{4A36BD45-DA26-4EEF-8334-8D4A5453B96A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VincenzoBot.XUnit.Tests", "..\VincenzoBot.XUnit.Tests\VincenzoBot.XUnit.Tests.csproj", "{F503C7C0-4E8E-4893-A1CF-FA536CCC7BCD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{FCB965CA-77A0-43E4-9512-2C9BC03ECD25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCB965CA-77A0-43E4-9512-2C9BC03ECD25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCB965CA-77A0-43E4-9512-2C9BC03ECD25}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4A36BD45-DA26-4EEF-8334-8D4A5453B96A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A36BD45-DA26-4EEF-8334-8D4A5453B96A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A36BD45-DA26-4EEF-8334-8D4A5453B96A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A36BD45-DA26-4EEF-8334-8D4A5453B96A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F503C7C0-4E8E-4893-A1CF-FA536CCC7BCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F503C7C0-4E8E-4893-A1CF-FA536CCC7BCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F503C7C0-4E8E-4893-A1CF-FA536CCC7BCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F503C7C0-4E8E-4893-A1CF-FA536CCC7BCD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

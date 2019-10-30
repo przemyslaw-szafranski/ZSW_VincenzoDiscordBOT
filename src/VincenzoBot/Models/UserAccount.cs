@@ -8,10 +8,10 @@ namespace VincenzoDiscordBot.Models
         public string Nickname { get; set; }
         public DateTime LastDaily { get; set; } = DateTime.UtcNow.AddDays(-2);
         public DateTime LastMessage { get; set; } = DateTime.UtcNow;
-        public string Yt_id { get; set; }
+        public string Yt_id { get; set; } = null;
         //last visit date
-        public uint Xp { get; set; }
-        public uint Haczyks { get; set; } // my currency ֏
+        public uint Xp { get; set; } = 0;
+        public uint Haczyks { get; set; } = Constants.WELCOME_HACZYKS;// my currency ֏
                                           //number of warns
 
     }

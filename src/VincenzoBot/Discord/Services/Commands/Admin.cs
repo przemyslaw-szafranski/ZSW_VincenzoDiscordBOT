@@ -18,10 +18,12 @@ namespace VincenzoBot.Modules
     {
         private readonly UserAccountRepository _userRepo;
         private readonly BotConfigRepository _configRepo;
-        public Admin(UserAccountRepository userRepo, BotConfigRepository config)
+        private readonly ILogger _logger;
+        public Admin(UserAccountRepository userRepo, BotConfigRepository config, ILogger logger)
         {
             _userRepo = userRepo;
             _configRepo = config;
+            _logger = logger;
         }
         [Command("saveAccounts"), Alias("saccounts", "savea")]
         [RequireUserPermission(GuildPermission.Administrator)]
@@ -51,11 +53,12 @@ namespace VincenzoBot.Modules
             var channel = Context.Guild.GetChannel(_configRepo._config.CommandsOutputChannelID) as ISocketMessageChannel;
             await channel.SendMessageAsync($"Changed game to `{gamename}`");
         }
-
+        //Ordnung
+        #region Ordnung
         [Command("purge")]
         [Remarks("Purges A User's Last Messages. Default Amount To Purge Is 100")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
-        public async Task Clear(SocketGuildUser user, int amountOfMessagesToDelete = 100)
+        public async Task Purge(SocketGuildUser user, int amountOfMessagesToDelete = 100)
         {
             if (user == Context.User)
                 amountOfMessagesToDelete++; //Because it will count the purge command as a message
@@ -67,6 +70,20 @@ namespace VincenzoBot.Modules
             await (Context.Message.Channel as SocketTextChannel).DeleteMessagesAsync(result);
 
         }
+
+        [Command("kick")]
+        [Remarks("Kicks user from the server")]
+        [RequireUserPermission(GuildPermission.KickMembers)]
+        public async Task Kick(ulong id, string reason=null)
+        {
+            var user = Context.Guild.GetUser(id);
+            if (user.IsBot || user.IsWebhook) return;
+            await Context.Message.DeleteAsync();
+            await user.KickAsync(reason);
+            _logger.Log($"{Context.User.Username} has kicked user {user.Nickname} {reason}");
+
+
+        }
         [Command("clear", RunMode = RunMode.Async)]
         [Remarks("Clears An Amount Of Messages")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
@@ -74,7 +91,7 @@ namespace VincenzoBot.Modules
         {
             await (Context.Message.Channel as SocketTextChannel).DeleteMessagesAsync(await Context.Message.Channel.GetMessagesAsync(amountOfMessagesToDelete + 1).FlattenAsync());
         }
-
+        #endregion Ordnung
         [RequireOwner]
         //[RequireRoleAttribute("Admin")]
         [Command("write")]

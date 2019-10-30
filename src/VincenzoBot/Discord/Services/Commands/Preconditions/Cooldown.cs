@@ -19,7 +19,7 @@ namespace VincenzoBot.Preconditions
         /// <param name="adminsAreLimited">Set whether admins should have cooldowns between commands use.</param>
         public Cooldown(int seconds, bool adminsAreLimited = false)
         {
-            CooldownLength = TimeSpan.FromSeconds(seconds);
+             CooldownLength = TimeSpan.FromSeconds(seconds);
             AdminsAreLimited = adminsAreLimited;
         }
 

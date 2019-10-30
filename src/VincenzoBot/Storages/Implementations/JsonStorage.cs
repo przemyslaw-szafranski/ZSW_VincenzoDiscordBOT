@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace VincenzoBot.Storages.Implementations
 {
@@ -30,7 +31,7 @@ namespace VincenzoBot.Storages.Implementations
             var file = $"{key}.json";
             Directory.CreateDirectory(Path.GetDirectoryName(file));
             var json = JsonConvert.SerializeObject(obj, Formatting.Indented);
-            File.WriteAllText(file,json);
+            File.WriteAllText(file, json);
         }
 
         public static implicit operator JsonStorage(Mock<JsonStorage> v)

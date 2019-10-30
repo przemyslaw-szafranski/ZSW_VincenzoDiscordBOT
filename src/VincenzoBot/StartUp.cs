@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using VicenzoBot.Modules;
 using VincenzoBot.Config;
+using VincenzoBot.Modules;
 using VincenzoBot.Repositories;
 using VincenzoBot.Services.Discord;
 using VincenzoBot.Storages;
@@ -33,6 +34,8 @@ namespace VincenzoBot.Discord
             .AddSingleton<DiscordLogger>()
             .AddSingleton<UserAccountRepository>()
             .AddSingleton<UserAccountService>()
+            .AddSingleton<MessageHandlerService>()
+            .AddSingleton<LevelingService>()
             // You can pass in an instance of the desired type
 
             // ...or by using the generic method.

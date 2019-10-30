@@ -73,15 +73,15 @@ namespace VincenzoBot.Repositories
         public void SaveAccount(SocketUser socketUser)
         {
             _logger.Log("Saving user: " + socketUser.Username);
-            UserAccount user = GetUserOrCreateUser(socketUser);
+            UserAccount user = GetOrCreateUser(socketUser);
             _storage.StoreObject(user, Constants.USERACCOUNTS_FOLDER + $"/{user.Nickname}");
         }
-        private void SaveAccount(UserAccount user)
+        public void SaveAccount(UserAccount user)
         {
             _logger.Log("Saving user: " + user.Nickname);
             _storage.StoreObject(user, Constants.USERACCOUNTS_FOLDER + $"/{user.Nickname}");
         }
-        public UserAccount GetUserOrCreateUser(SocketUser user)
+        public UserAccount GetOrCreateUser(SocketUser user)
         {
             var result = from a in _accounts
                          where a.Id == user.Id

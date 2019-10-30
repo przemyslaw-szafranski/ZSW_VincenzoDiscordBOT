@@ -28,14 +28,14 @@ namespace VicenzoBot.Modules
         public async Task MyStats()
         {
 
-            UserAccount user = _userRepo.GetUserOrCreateUser(Context.User);
+            UserAccount user = _userRepo.GetOrCreateUser(Context.User);
             var embed = new EmbedBuilder();
             embed.WithTitle("");
             embed.WithColor(0xFF, 0xFF, 0x80);//TODO kolorek zalezny od rangi
             embed.WithAuthor("👤 " + Context.User.Username + " - statystyki");//TODO emoji od rangi
             embed.WithThumbnailUrl(Context.User.GetAvatarUrl());
             embed.AddField("🎬YouTube:", user.Yt_id==null? "Brak!" : user.Yt_id, true);
-            embed.AddField("🏆Poziom:", "#404", true);
+            embed.AddField("🏆Poziom:", user.Level, true);
             embed.AddField("⚡EXP:", user.Xp, true);
             embed.AddField("💰Haczyki ֏", user.Haczyks, true);
             embed.AddField("📅Data dołączenia:", Context.Guild.CurrentUser.JoinedAt.Value.ToString("dd/MM/yyyy H:MM"), true);
@@ -46,7 +46,7 @@ namespace VicenzoBot.Modules
         [Cooldown(20)]
         public async Task addYouTubeAccount(string ytName)
         {
-            UserAccount user = _userRepo.GetUserOrCreateUser(Context.User);
+            UserAccount user = _userRepo.GetOrCreateUser(Context.User);
             if (ytName == null || ytName == "" || ytName.Length <= 2 || ytName.Length > 20)
             {
                 await Context.User.SendMessageAsync($"Coś Ci się chyba z tym kontem YouTube pomyliło (**{ytName}**) :face_palm:");

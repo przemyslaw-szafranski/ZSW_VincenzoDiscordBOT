@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace VincenzoBot
 {
@@ -33,5 +34,6 @@ namespace VincenzoBot
 
         // Exception messages
         public static readonly string ExDailyTooSoon = "Cannot give daily sooner than 24 hours after the last one.";
+        public static readonly string VULAGARITY_LIST_PATH = Directory.GetCurrentDirectory() + "/Content/vulgarityList.txt";
     }
 }

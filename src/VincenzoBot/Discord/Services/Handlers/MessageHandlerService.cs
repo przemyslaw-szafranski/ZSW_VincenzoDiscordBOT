@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,9 +52,18 @@ namespace VincenzoBot.Modules
                     await msg.Channel.SendMessageAsync($"Gratulacje {user.Result.Nickname}, wbiłeś level {user.Result.Level}");
                     return;
                 }
-                string respond = checkMessage(arg);
+                string respond = CheckMessage(arg);
                 if (!respond.Equals(""))
                     await msg.Channel.SendMessageAsync(respond);
+
+                respond = CheckIfVulgarity(arg);
+                if (!respond.Equals(""))
+                {
+                    var context = new SocketCommandContext(_client, msg);
+                    var message = msg as IMessage;  
+                    await context.Channel.DeleteMessageAsync(message.Id);
+                    await msg.Channel.SendMessageAsync(respond);
+                }
             }
 
             catch (Exception e)
@@ -61,10 +72,18 @@ namespace VincenzoBot.Modules
             }
         }
 
-        private string checkMessage(SocketMessage socketMsg)
+        private string CheckMessage(SocketMessage socketMsg)
         {
             if (socketMsg.Content.Contains("kocham"))
                 return $"*Vincenzo śmieje się z {socketMsg.Author.Username}.*";
+            return "";
+        }
+
+        private string CheckIfVulgarity(SocketMessage socketMsg)
+        {
+            var vulgarityList = File.ReadAllLines(Constants.VULAGARITY_LIST_PATH).ToList();
+            if(vulgarityList.Any(x => socketMsg.Content.Contains(x)))
+                return $"*Tylko Vincenzo może tutaj przeklinać {socketMsg.Author.Username}.*";
             return "";
         }
     }

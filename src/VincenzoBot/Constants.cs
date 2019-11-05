@@ -18,6 +18,7 @@ namespace VincenzoBot
         public const int MESSAGE_REWARD_COOLDOWN = 60;
         public const int MESSAGE_REWARD_MIN_LENGTH = 15;
         public const int MaxMessageLength = 2000;
+        public const int MAX_MESSAGES_PER_5_SECONDS = 5;
         // internal static readonly string InvisibleString = "\u200b";
         public static readonly Tuple<int, int> MessagRewardMinMax = Tuple.Create(1, 5);
         public static readonly int MinTimerIntervall = 3000;

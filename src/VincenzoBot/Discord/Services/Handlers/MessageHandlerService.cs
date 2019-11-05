@@ -59,9 +59,8 @@ namespace VincenzoBot.Modules
                 respond = CheckIfVulgarity(arg);
                 if (!respond.Equals(""))
                 {
-                    var context = new SocketCommandContext(_client, msg);
-                    var message = msg as IMessage;  
-                    await context.Channel.DeleteMessageAsync(message.Id);
+                    var message = msg as IMessage;
+                    await message.DeleteAsync();
                     await msg.Channel.SendMessageAsync(respond);
                 }
             }

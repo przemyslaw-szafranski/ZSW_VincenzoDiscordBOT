@@ -42,5 +42,65 @@ namespace VincenzoBot
             }
             return "";
         }
+
+
+
+        public static float GetCpuUsage()
+        {
+            if (!ShellHelper.IsLinux())
+                return -1;
+
+            float usage;
+
+            var output = ShellHelper.Bash("LC_ALL=C top -bn2 | grep \"Cpu(s)\" | tail -n1 | sed \"s/.*, *\\([0-9.]*\\)%* id.*/\\1/\" | awk \'{print 100 - $1}\'");
+            try
+            {
+                usage = float.Parse(output);
+            }
+            catch(Exception)
+            {
+                usage = -1;
+            }
+            return usage;
+        }
+
+        public static float GetRamUsage()
+        {
+            if (!ShellHelper.IsLinux())
+                return -1;
+
+            float usage;
+
+            var output = ShellHelper.Bash("free -m | awk '/Mem:/ { printf(\"%3.1f\", $3/$2*100) }'");
+            try
+            {
+                usage = float.Parse(output);
+            }
+            catch (Exception)
+            {
+                usage = -1;
+            }
+            return usage;
+        }
+
+        public static float GetDiskUsage()
+        {
+            if (!ShellHelper.IsLinux())
+                return -1;
+
+            float usage;
+
+            var output = ShellHelper.Bash("df -h / | awk '/\\// {print $(NF-1)}' | tr =d '%'");
+            try
+            {
+                usage = float.Parse(output);
+            }
+            catch (Exception)
+            {
+                usage = -1;
+            }
+            return usage;
+        }
+
     }
 }

@@ -134,19 +134,47 @@ namespace VincenzoBot.Modules
         #endregion Ordnung
 
         [DeleteCommandUsage]
+        [Command("resources")]
+        [RequireRole("Admin")]
+        [Cooldown(10)]
+        [Summary("Queries resource consumption of Raspberry PI")]
+        public async Task Resources()
+        {
+            var cpu = Utilities.GetCpuUsage();
+            var ram = Utilities.GetRamUsage();
+            var dsk = Utilities.GetDiskUsage();
+
+            string msg;
+            if (cpu == -1 || ram == -1 || dsk == -1)
+            {
+                await Context.Channel.SendMessageAsync("Jeżeli widzisz ten napis to prawdopodobnie Mariusz coś zjebał!");
+            }
+            else
+            {
+                var embed = new EmbedBuilder();
+                embed.WithTitle("");
+                embed.WithColor(0xFF, 0xFF, 0x80);
+                embed.AddField("CPU:",  $"{cpu}%", true);
+                embed.AddField("RAM:",  $"{ram}%", true);
+                embed.AddField("Dysk:", $"{dsk}%", true);
+                await Context.Channel.SendMessageAsync("Stan Raspberry PI", false, embed.Build());
+            }
+        }
+
+        [DeleteCommandUsage]
         [Command("write")]
         [RequireRole("Admin")]
         [Cooldown(2)]
         [Summary("Echoes a message.")]
-        public async Task Write(string msg, SocketTextChannel ch=null)
+        public async Task Write(string msg, SocketTextChannel ch = null)
         {
-                if (ch == null)
-                    await Context.Channel.SendMessageAsync(msg);
-                else
-                {
-                    await ch.SendMessageAsync(msg);
-                }
-            
+            if (ch == null)
+                await Context.Channel.SendMessageAsync(msg);
+            else
+            {
+                await ch.SendMessageAsync(msg);
+            }
+
         }
 
         [RequireOwner]

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +11,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using VincenzoBot.Discord;
 using VincenzoBot.Config;
+using VincenzoBot.Discord.Models;
 using VincenzoBot.Repositories;
 
 namespace VincenzoBot.Modules
@@ -20,6 +23,8 @@ namespace VincenzoBot.Modules
         private readonly DiscordBotConfig _config;
         private readonly LevelingService _levelingService;
         private readonly IUserAccountRepository _userRepo;
+
+        private List<Message> _messagesList;
         public MessageHandlerService(DiscordSocketClient client, DiscordLogger logger, DiscordBotConfig config, LevelingService levelingService, IUserAccountRepository userRepo)
         {
             _config = config;
@@ -27,6 +32,7 @@ namespace VincenzoBot.Modules
             _logger = logger;
             _levelingService = levelingService;
             _userRepo = userRepo;
+            _messagesList = new List<Message>();
         }
         public void Initialize()
         {
@@ -50,9 +56,25 @@ namespace VincenzoBot.Modules
                     await msg.Channel.SendMessageAsync($"Gratulacje {user.Result.Nickname}, wbiłeś level {user.Result.Level}");
                     return;
                 }
-                string respond = checkMessage(arg);
+                string respond = CheckMessage(arg);
                 if (!respond.Equals(""))
                     await msg.Channel.SendMessageAsync(respond);
+
+                respond = CheckIfVulgarity(arg);
+                if (!respond.Equals(""))
+                {
+                    var message = msg as IMessage;
+                    await message.DeleteAsync();
+                    await msg.Channel.SendMessageAsync(respond);
+                }
+
+                respond = CheckIfSpam(arg);
+                if (!respond.Equals(""))
+                {
+                    var message = msg as IMessage;
+                    await message.DeleteAsync();
+                    await msg.Channel.SendMessageAsync(respond);
+                }
             }
 
             catch (Exception e)
@@ -61,10 +83,33 @@ namespace VincenzoBot.Modules
             }
         }
 
-        private string checkMessage(SocketMessage socketMsg)
+        private string CheckMessage(SocketMessage socketMsg)
         {
             if (socketMsg.Content.Contains("kocham"))
                 return $"*Vincenzo śmieje się z {socketMsg.Author.Username}.*";
+            return "";
+        }
+
+        private string CheckIfVulgarity(SocketMessage socketMsg)
+        {
+            var vulgarityList = File.ReadAllLines(Constants.VULAGARITY_LIST_PATH).ToList();
+            if(vulgarityList.Any(x => socketMsg.Content.Contains(x)))
+                return $"*Tylko Vincenzo może tutaj przeklinać {socketMsg.Author.Username}.*";
+            return "";
+        }
+
+        private string CheckIfSpam(SocketMessage socketMsg)
+        {
+            _messagesList.Add(new Message()
+            {
+                DateOfSending = socketMsg.CreatedAt.UtcDateTime,
+                UserId = socketMsg.Author.Id,
+            });
+
+            _messagesList = _messagesList.Where(x => (DateTime.UtcNow - x.DateOfSending).TotalSeconds < 5).ToList();
+
+            if (_messagesList.Count(x => x.UserId == socketMsg.Author.Id) > Constants.MAX_MESSAGES_PER_5_SECONDS)
+                return $"*Tylko Vincenzo może tutaj spamować {socketMsg.Author.Username}.*";
             return "";
         }
     }

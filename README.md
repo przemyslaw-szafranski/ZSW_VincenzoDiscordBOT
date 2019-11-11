@@ -1,2 +1,2 @@
-# ZSW_VincenzoDiscordBOT
+# VincenzoDiscordBOT
 Discord bot .NET CORE

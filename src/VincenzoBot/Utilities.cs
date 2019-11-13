@@ -13,15 +13,6 @@ namespace VincenzoBot
         /// </summary>
         static Utilities()
         {
-            try
-            {
-                string json = File.ReadAllText("Phrases/phrases.json");
-                var data = JsonConvert.DeserializeObject<dynamic>(json);
-                _phrases = data.ToObject <Dictionary<string, string>>();
-            }catch(Exception e)
-            {
-                throw e;
-            }
         }
         public static string GetPhrase(string key)
         {
@@ -42,5 +33,84 @@ namespace VincenzoBot
             }
             return "";
         }
+
+
+
+        public static float GetCpuUsage()
+        {
+            if (!ShellHelper.IsLinux())
+                return -1;
+
+            float usage;
+
+            var output = ShellHelper.Bash("LC_ALL=C top -bn2 | grep \"Cpu(s)\" | tail -n1 | sed \"s/.*, *\\([0-9.]*\\)%* id.*/\\1/\" | awk \'{print 100 - $1}\'");
+            try
+            {
+                usage = float.Parse(output);
+            }
+            catch(Exception)
+            {
+                usage = -1;
+            }
+            return usage;
+        }
+
+        public static float GetCpuTemperature()
+        {
+            if (!ShellHelper.IsLinux())
+                return -1;
+
+            float usage;
+
+            var output = ShellHelper.Bash("vcgencmd measure_temp | awk -F'=' '{print $2}' | tr -d \"'C\"");
+            try
+            {
+                usage = float.Parse(output);
+            }
+            catch (Exception)
+            {
+                usage = -1;
+            }
+            return usage;
+        }
+
+        public static float GetRamUsage()
+        {
+            if (!ShellHelper.IsLinux())
+                return -1;
+
+            float usage;
+
+            var output = ShellHelper.Bash("free -m | awk '/Mem:/ { printf(\"%3.1f\", $3/$2*100) }'");
+            try
+            {
+                usage = float.Parse(output);
+            }
+            catch (Exception)
+            {
+                usage = -1;
+            }
+            return usage;
+        }
+
+        public static float GetDiskUsage()
+        {
+            if (!ShellHelper.IsLinux())
+                return -1;
+
+            float usage;
+
+            var output = ShellHelper.Bash("df -h / | awk '/\\// {print $(NF-1)}' | tr -d '%'");
+            try
+            {
+                usage = float.Parse(output);
+            }
+            catch (Exception)
+            {
+                usage = -1;
+            }
+            return usage;
+        }
+
     }
 }

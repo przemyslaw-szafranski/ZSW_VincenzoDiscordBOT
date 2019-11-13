@@ -33,12 +33,12 @@ namespace VicenzoBot.Modules
             embed.WithColor(0xFF, 0xFF, 0x80);//TODO kolorek zalezny od rangi
             embed.WithAuthor("👤 " + UserAccountService.GetUsername(Context.User) + " - statystyki");//TODO emoji od rangi
             embed.WithThumbnailUrl(Context.User.GetAvatarUrl());
-            embed.AddField("🎬YouTube:", user.Yt_id==null? "Brak!" : user.Yt_id, true);
+            //embed.AddField("🎬YouTube:", user.Yt_id==null? "Brak!" : user.Yt_id, true);
             embed.AddField("🏆Poziom:", user.Level, true);
             embed.AddField("⚡EXP:", user.Xp, true);
             embed.AddField("💰Haczyki ֏", user.Haczyks, true);
             embed.AddField("📅Data dołączenia:", Context.Guild.CurrentUser.JoinedAt.Value.ToString("dd/MM/yyyy H:MM"), true);
-            embed.WithFooter("Piękną wizytówkę sponsoruje Hantick", "https://cdn.discordapp.com/emojis/590579218463588363.png?v=1");
+            embed.WithFooter("Piękną wizytówkę sponsoruje szwadron wilków alfa", "https://cdn.discordapp.com/emojis/590579218463588363.png?v=1");
             await Context.Channel.SendMessageAsync("*Vincenzo wyciąga z teczki wizytówkę:*", false, embed.Build());
         }
         [Command("updateYouTube"), Alias("updateYT", "upYT")]

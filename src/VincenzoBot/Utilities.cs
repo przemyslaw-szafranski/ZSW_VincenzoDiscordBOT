@@ -13,6 +13,19 @@ namespace VincenzoBot
         /// </summary>
         static Utilities()
         {
+<<<<<<< HEAD
+=======
+            try
+            {
+                //string json = File.ReadAllText("Phrases/phrases.json");
+                //var data = JsonConvert.DeserializeObject<dynamic>(json);
+                //_phrases = data.ToObject <Dictionary<string, string>>();
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+>>>>>>> Fix Exception
         }
         public static string GetPhrase(string key)
         {

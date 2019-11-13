@@ -140,25 +140,19 @@ namespace VincenzoBot.Modules
         [Summary("Queries resource consumption of Raspberry PI")]
         public async Task Resources()
         {
-            var cpu = Utilities.GetCpuUsage();
-            var ram = Utilities.GetRamUsage();
-            var dsk = Utilities.GetDiskUsage();
-
-            string msg;
-            if (cpu == -1 || ram == -1 || dsk == -1)
-            {
-                await Context.Channel.SendMessageAsync("Jeżeli widzisz ten napis to prawdopodobnie Mariusz coś zjebał!");
-            }
-            else
-            {
-                var embed = new EmbedBuilder();
-                embed.WithTitle("");
-                embed.WithColor(0xFF, 0xFF, 0x80);
-                embed.AddField("CPU:",  $"{cpu}%", true);
-                embed.AddField("RAM:",  $"{ram}%", true);
-                embed.AddField("Dysk:", $"{dsk}%", true);
-                await Context.Channel.SendMessageAsync("Stan Raspberry PI", false, embed.Build());
-            }
+            var cpu =     Utilities.GetCpuUsage();
+            var cpuTemp = Utilities.GetCpuTemperature();
+            var ram =     Utilities.GetRamUsage();
+            var dsk =     Utilities.GetDiskUsage();
+            
+            var embed = new EmbedBuilder();
+            embed.WithTitle("");
+            embed.WithColor(0xFF, 0xFF, 0x80);
+            embed.AddField("CPU:", $"{cpu}%", true);
+            embed.AddField("CPU Temp.:", $"{cpuTemp}%", true);
+            embed.AddField("RAM:",  $"{ram}%", true);
+            embed.AddField("Dysk:", $"{dsk}%", true);
+            await Context.Channel.SendMessageAsync("Stan Raspberry PI", false, embed.Build());
         }
 
         [DeleteCommandUsage]

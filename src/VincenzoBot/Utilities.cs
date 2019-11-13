@@ -62,7 +62,7 @@ namespace VincenzoBot
 
             float usage;
 
-            var output = ShellHelper.Bash("vcgencmd measure_temp | awk -F'=' '{print $1}' | tr -d '\'C'");
+            var output = ShellHelper.Bash("vcgencmd measure_temp | awk -F'=' '{print $2}' | tr -d \"'C\"");
             try
             {
                 usage = float.Parse(output);

@@ -149,7 +149,7 @@ namespace VincenzoBot.Modules
             embed.WithTitle("");
             embed.WithColor(0xFF, 0xFF, 0x80);
             embed.AddField("CPU:", $"{cpu}%", true);
-            embed.AddField("CPU Temp.:", $"{cpuTemp}%", true);
+            embed.AddField("CPU Temp.:", $"{cpuTemp}'C", true);
             embed.AddField("RAM:",  $"{ram}%", true);
             embed.AddField("Dysk:", $"{dsk}%", true);
             await Context.Channel.SendMessageAsync("Stan Raspberry PI", false, embed.Build());

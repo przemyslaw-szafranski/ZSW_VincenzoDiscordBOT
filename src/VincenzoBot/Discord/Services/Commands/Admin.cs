@@ -2,11 +2,8 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using VincenzoBot.Config;
 using VincenzoBot.Discord.Services.Commands.Preconditions;
 using VincenzoBot.Preconditions;
 using VincenzoBot.Repositories;
@@ -60,7 +57,7 @@ namespace VincenzoBot.Modules
         [Remarks("Ban A User")]
         [DeleteCommandUsage]
         [RequireUserPermission(GuildPermission.BanMembers)]
-        public async Task Ban([NoSelf][RequireBotHigherHirachy] IGuildUser user, [Remainder] string reason=null)
+        public async Task Ban([NoSelf][RequireBotHigherHirachy] IGuildUser user, [Remainder] string reason = null)
         {
             await SendLogToChannel($"{UserAccountService.GetUsername(Context.User)} has banned user {user.Mention} `{reason}`");
             _logger.Log($"{UserAccountService.GetUsername(Context.User)} has banned user {user.Username + user.Id}{reason}");
@@ -84,7 +81,7 @@ namespace VincenzoBot.Modules
         [DeleteCommandUsage]
         [Remarks("Mutes A User")]
         [RequireUserPermission(GuildPermission.MuteMembers)]
-        public async Task Mute([NoSelf][RequireBotHigherHirachy] IGuildUser user, [Remainder]string reason=null)
+        public async Task Mute([NoSelf][RequireBotHigherHirachy] IGuildUser user, [Remainder]string reason = null)
         {
             await SendLogToChannel($"{UserAccountService.GetUsername(Context.User)} has muted user {user.Mention} `{reason}`");
             _logger.Log($"{UserAccountService.GetUsername(Context.User)} has muted user {user.Username + user.Id} {reason}");
@@ -138,15 +135,15 @@ namespace VincenzoBot.Modules
         [RequireRole("Admin")]
         [Cooldown(2)]
         [Summary("Echoes a message.")]
-        public async Task Write(string msg, SocketTextChannel ch=null)
+        public async Task Write(string msg, SocketTextChannel ch = null)
         {
-                if (ch == null)
-                    await Context.Channel.SendMessageAsync(msg);
-                else
-                {
-                    await ch.SendMessageAsync(msg);
-                }
-            
+            if (ch == null)
+                await Context.Channel.SendMessageAsync(msg);
+            else
+            {
+                await ch.SendMessageAsync(msg);
+            }
+
         }
 
         [RequireOwner]
@@ -181,7 +178,7 @@ namespace VincenzoBot.Modules
         }
         public async Task SendLogToChannel(string msg)
         {
-            var channel = Context.Guild.GetChannel(_configRepo._config.CommandsOutputChannelID) as ISocketMessageChannel;
+            var channel = Context.Guild.GetChannel(631895437543997444) as ISocketMessageChannel;
             await channel.SendMessageAsync(msg);
         }
         public async Task<IRole> GetMuteRole(IGuild guild)
@@ -220,6 +217,6 @@ namespace VincenzoBot.Modules
             return muteRole;
         }
     }
-   
+
 
 }

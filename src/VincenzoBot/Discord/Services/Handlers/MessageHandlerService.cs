@@ -1,16 +1,13 @@
-﻿using System;
+﻿using Discord;
+using Discord.Commands;
+using Discord.WebSocket;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Sockets;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
-using VincenzoBot.Discord;
 using VincenzoBot.Config;
+using VincenzoBot.Discord;
 using VincenzoBot.Discord.Models;
 using VincenzoBot.Repositories;
 
@@ -37,6 +34,7 @@ namespace VincenzoBot.Modules
         public void Initialize()
         {
             _client.MessageReceived += HandleMessageAsync;
+            _client.UserJoined += AnnounceJoinedUser;
         }
 
         private async Task HandleMessageAsync(SocketMessage arg)
@@ -93,7 +91,7 @@ namespace VincenzoBot.Modules
         private string CheckIfVulgarity(SocketMessage socketMsg)
         {
             var vulgarityList = File.ReadAllLines(Constants.VULAGARITY_LIST_PATH).ToList();
-            if(vulgarityList.Any(x => socketMsg.Content.Contains(x)))
+            if (vulgarityList.Any(x => socketMsg.Content.Contains(x)))
                 return $"*Tylko Vincenzo może tutaj przeklinać {socketMsg.Author.Username}.*";
             return "";
         }
@@ -111,6 +109,19 @@ namespace VincenzoBot.Modules
             if (_messagesList.Count(x => x.UserId == socketMsg.Author.Id) > Constants.MAX_MESSAGES_PER_5_SECONDS)
                 return $"*Tylko Vincenzo może tutaj spamować {socketMsg.Author.Username}.*";
             return "";
+        }
+
+        public async Task AnnounceJoinedUser(SocketGuildUser user)
+        {
+            try
+            {
+                var channel = _client.GetChannel(631895437543997444) as SocketTextChannel;
+                await channel.SendMessageAsync("Witaj " + user.Mention + " na serwerze!");
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
     }
 }
